@@ -1,0 +1,71 @@
+% ==============================================================================
+% MAIN.TEX - MASTER COMPILATION DOCUMENT
+% ==============================================================================
+\documentclass[11pt, a4paper, twoside, openright]{report}
+
+% 1. Inject packages, environments, and math macros
+\input{preamble.tex}
+
+% Overleaf Performance Tip:
+% To recompile ONLY the week currently being edited without rebuilding everything,
+% uncomment the line below:
+% \includeonly{week1}
+
+\begin{document}
+
+% --- Cover Page ---
+\begin{titlepage}
+    \thispagestyle{empty}
+    \begin{tikzpicture}[remember picture, overlay]
+        \fill[color=paletteDark] (current page.north west) rectangle ([xshift=16mm]current page.south west);
+        \fill[color=paletteRed] ([xshift=16mm]current page.north west) rectangle ([xshift=18mm]current page.south west);
+    \end{tikzpicture}
+    
+    \vspace*{2cm}
+    \begin{flushright}
+        {\sffamily\LARGE\bfseries ANALYSIS III}\\[0.4em]
+        {\sffamily\Large Multivariable Differential \& Integral Calculus}\\[1.5em]
+        \rule{0.7\textwidth}{1.5pt}\\[2.5em]
+        {\large\textsf{Complete Lecture Notes, Proofs \& Revision Syllabus}}\\[3.5em]
+        
+        
+    \end{flushright}
+   \begin{flushright}
+           \includegraphics[scale=0.375]{Cover.png}
+
+   \end{flushright}
+    \vfill
+    \begin{flushright}
+        \textsf{\textbf{Course:}} Analysis III MATH-202(c) \\[0.2em]
+        \textsf{\textbf{Teacher:}} Alexandre de Faveri \\[0.2em]
+        \textsf{\textbf{Author:}} Thélio Geiser \\[0.2em]
+        \textsf{\textbf{Last Compiled:}} \today
+    \end{flushright}
+    \vspace{1cm}
+\end{titlepage}
+
+% --- Disclaimer / Warning Page ---
+\input{warning.tex}
+
+% --- Table of Contents ---
+\cleardoublepage
+\tableofcontents
+\cleardoublepage
+
+% --- Modular Chapter Inclusions ---
+\include{week1}
+% \include{week2}
+% \include{week3}
+% \include{week4}
+% \include{week5}
+% \include{week6}
+% \include{week7}
+% \include{week8}
+% \include{week9}
+% \include{week10}
+% \include{week11}
+% \include{week12}
+% \include{week13}
+% \include{week14}
+
+\end{document}

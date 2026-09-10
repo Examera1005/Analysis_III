@@ -1,0 +1,268 @@
+% ==============================================================================
+% WEEK 1: DIFFERENTIAL OPERATORS
+% ==============================================================================
+
+\chapter{Differential Operators}
+\label{chap:week1}
+
+\section{Review, Notations, and Terminology}
+
+We begin by recalling standard foundational sets and indexing conventions:
+\begin{itemize}
+    \item $\mathbb{N} = \{0, 1, 2, 3, \dots\}$ denotes the set of natural numbers.
+    \item $\mathbb{Z} = \{\dots, -2, -1, 0, 1, 2, \dots\}$ denotes the set of integers.
+    \item $\mathbb{R}$ denotes the field of real numbers.
+\end{itemize}
+For multidimensional spaces $\mathbb{R}^n = \underbrace{\mathbb{R} \times \dots \times \mathbb{R}}_{n \text{ times}}$, an arbitrary point $x \in \mathbb{R}^n$ is written in Cartesian coordinates as:
+\begin{align}
+    n &= 2 : \quad (x_1, x_2) = (x, y) \in \mathbb{R}^2, \\
+    n &= 3 : \quad (x_1, x_2, x_3) = (x, y, z) \in \mathbb{R}^3, \\
+    n > 0 : \quad &(x_1, x_2, \dots, x_n) \in \mathbb{R}^n.
+\end{align}
+
+\begin{definition}{Scalar Field}{scalar_field}
+Let $\Omega \subset \mathbb{R}^n$ be an open domain. A real-valued function
+\begin{equation}
+    f : \Omega \longrightarrow \mathbb{R}, \quad x \longmapsto f(x) = f(x_1, x_2, \dots, x_n)
+\end{equation}
+depending on multiple variables is called a \textbf{scalar field} defined on $\Omega$.
+\end{definition}
+
+\begin{remarque}[Continuity and Differentiability Classes]
+For $k \in \mathbb{N}$, we write $f \in \mathcal{C}^k(\Omega)$ if all partial derivatives of order $\le k$ exist and are continuous on $\Omega$.
+\begin{itemize}
+    \item For $k = 0$, $f \in \mathcal{C}^0(\Omega)$ signifies that $f$ is continuous on $\Omega$.
+    \item For instance, $f(x) = \sqrt{x}$ on $(0, \infty)$ satisfies $f'(x) = \frac{1}{2\sqrt{x}}$, so $f \in \mathcal{C}^1\bigl((0, \infty)\bigr)$.
+\end{itemize}
+\end{remarque}
+
+\begin{definition}{Vector Field}{vector_field}
+Let $\Omega \subset \mathbb{R}^n$ be an open domain with $n \ge 1$ and $m > 1$. A vector-valued function
+\begin{equation}
+    F : \Omega \longrightarrow \mathbb{R}^m, \quad x \longmapsto F(x) = \big(F_1(x), F_2(x), \dots, F_m(x)\big)
+\end{equation}
+where each component $F_i : \Omega \to \mathbb{R}$ is a scalar field, is called a \textbf{vector field}. A vector field can thus be viewed as an ordered collection of scalar fields. We write $F \in \mathcal{C}^k(\Omega, \mathbb{R}^m)$ if every component satisfies $F_i \in \mathcal{C}^k(\Omega)$ for all $i = 1, \dots, m$.
+\end{definition}
+
+\begin{definition}{Nabla Operator (Del)}{nabla_operator}
+The formal vector differential operator \textbf{nabla} (or \textbf{del}), denoted by $\vec{\nabla}$ or $\nabla$, is defined in $\mathbb{R}^n$ by:
+\begin{equation}
+    \vec{\nabla} = \left( \pdv{}{x_1}, \, \pdv{}{x_2}, \, \dots, \, \pdv{}{x_n} \right).
+\end{equation}
+\end{definition}
+
+---
+
+\section{The Gradient Operator}
+
+\begin{definition}{Gradient of a Scalar Field}{gradient_def}
+Let $\Omega \subset \mathbb{R}^n$ be an open domain and let $f : \Omega \to \mathbb{R}$ be a scalar field such that $f \in \mathcal{C}^1(\Omega)$. The \textbf{gradient} of $f$, denoted by $\mathrm{grad}\,f$, $\vec{\nabla} f$, or $\mathrm{D}f$, is the vector field defined by:
+\begin{equation}
+    \mathrm{grad}\,f(x) = \vec{\nabla} f(x) = \left( \pdv{f}{x_1}(x), \, \pdv{f}{x_2}(x), \, \dots, \, \pdv{f}{x_n}(x) \right) \in \mathbb{R}^n.
+\end{equation}
+Formally, it represents the symbolic product of the nabla operator $\vec{\nabla}$ with the scalar function $f$:
+\begin{equation}
+    \vec{\nabla} f = \left( \pdv{}{x_1}, \, \dots, \, \pdv{}{x_n} \right) \cdot f = \left( \pdv{f}{x_1}, \, \dots, \, \pdv{f}{x_n} \right).
+\end{equation}
+The gradient transforms a scalar field into a vector field: $\mathrm{grad} : \mathcal{C}^1(\Omega, \mathbb{R}) \to \mathcal{C}^0(\Omega, \mathbb{R}^n)$.
+\end{definition}
+
+\begin{remarque}[Three-Dimensional Gradient]
+In $\mathbb{R}^3$, where $(x_1, x_2, x_3) = (x, y, z)$, the gradient evaluates to:
+\begin{equation}
+    \vec{\nabla} f(x, y, z) = \left( \pdv{f}{x}, \, \pdv{f}{y}, \, \pdv{f}{z} \right).
+\end{equation}
+\end{remarque}
+
+\begin{exemple}[Direct Computation of Gradient]
+Consider $f : \mathbb{R}^3 \to \mathbb{R}$ defined by $f(x, y, z) = x^2 y^3 \sin(z^2)$. The partial derivatives are:
+\begin{align}
+    \pdv{f}{x} &= 2x y^3 \sin(z^2), \\
+    \pdv{f}{y} &= 3x^2 y^2 \sin(z^2), \\
+    \pdv{f}{z} &= 2x^2 y^3 z \cos(z^2).
+\end{align}
+Hence:
+\begin{equation}
+    \vec{\nabla} f(x, y, z) = \Big( 2x y^3 \sin(z^2), \, 3x^2 y^2 \sin(z^2), \, 2x^2 y^3 z \cos(z^2) \Big).
+\end{equation}
+\end{exemple}
+
+\begin{exemple}[Gravitational Potential Field]
+Let $P_0 = (x_0, y_0, z_0)$ be a source point bearing a mass $M$, and $P = (x, y, z)$ the observation point bearing a mass $m$. The distance between them is:
+\begin{equation}
+    r = \norm{P - P_0} = \sqrt{(x - x_0)^2 + (y - y_0)^2 + (z - z_0)^2}.
+\end{equation}
+The gravitational potential $f : \mathbb{R}^3 \setminus \{P_0\} \to \mathbb{R}$ is given by:
+\begin{equation}
+    f(x, y, z) = \psi(r) = \frac{C}{r}, \quad \text{where } C = G M m.
+\end{equation}
+Applying the chain rule to compute the partial derivatives:
+\begin{equation}
+    \pdv{r}{x} = \pdv{}{x} \sqrt{(x - x_0)^2 + (y - y_0)^2 + (z - z_0)^2} = \frac{x - x_0}{r}.
+\end{equation}
+Since $\frac{\dd\psi}{\dd r} = -\frac{C}{r^2}$, we obtain:
+\begin{equation}
+    \pdv{f}{x} = \frac{\dd\psi}{\dd r} \pdv{r}{x} = -\frac{C}{r^2} \cdot \frac{x - x_0}{r} = -\frac{C(x - x_0)}{r^3}.
+\end{equation}
+By radial symmetry:
+\begin{equation}
+    \pdv{f}{y} = -\frac{C(y - y_0)}{r^3}, \qquad \pdv{f}{z} = -\frac{C(z - z_0)}{r^3}.
+\end{equation}
+The resulting gravitational force field is the gradient of the potential:
+\begin{equation}
+    \vec{\nabla} f(x, y, z) = -\frac{C}{r^3} \big( x - x_0, \, y - y_0, \, z - z_0 \big) = -\frac{C}{r^3} (P - P_0).
+\end{equation}
+\end{exemple}
+
+---
+
+\section{The Divergence Operator}
+
+\begin{definition}{Divergence of a Vector Field}{divergence_def}
+Let $\Omega \subset \mathbb{R}^n$ be an open domain and let $F : \Omega \to \mathbb{R}^n$ be a vector field with $F \in \mathcal{C}^1(\Omega, \mathbb{R}^n)$. The \textbf{divergence} of $F$, denoted by $\mathrm{div}\,F$ or $\vec{\nabla} \cdot F$, is the scalar field defined by:
+\begin{equation}
+    \mathrm{div}\,F(x) = \vec{\nabla} \cdot F(x) = \sum_{i=1}^n \pdv{F_i}{x_i}(x) = \pdv{F_1}{x_1} + \pdv{F_2}{x_2} + \dots + \pdv{F_n}{x_n} \in \mathbb{R}.
+\end{equation}
+The divergence operator maps vector fields to scalar fields: $\mathrm{div} : \mathcal{C}^1(\Omega, \mathbb{R}^n) \to \mathcal{C}^0(\Omega, \mathbb{R})$.
+\end{definition}
+
+\begin{remarque}[Physical Interpretation: Flux and Conservation]
+Consider an infinitesimal control volume in 2D of dimensions $\dd x \times \dd y$ centered around $(x, y)$ with flow velocity $V = (V_x, V_y)$:
+\begin{itemize}
+    \item Net outflow along the $x$-direction:
+    \begin{equation}
+        \left( V_x + \pdv{V_x}{x} \dd x \right) \dd y - V_x \dd y = \pdv{V_x}{x} \dd x \dd y.
+    \end{equation}
+    \item Net outflow along the $y$-direction:
+    \begin{equation}
+        \left( V_y + \pdv{V_y}{y} \dd y \right) \dd x - V_y \dd x = \pdv{V_y}{y} \dd x \dd y.
+    \end{equation}
+\end{itemize}
+Summing both components yields the total rate of outward mass expansion per unit area:
+\begin{equation}
+    \text{Net Rate of Change} = \left( \pdv{V_x}{x} + \pdv{V_y}{y} \right) \dd x \dd y = (\vec{\nabla} \cdot V) \dd x \dd y.
+\end{equation}
+Consequently:
+\begin{itemize}
+    \item $\vec{\nabla} \cdot V(x) > 0$: The point acts as a \textbf{source} (net outward expansion).
+    \item $\vec{\nabla} \cdot V(x) < 0$: The point acts as a \textbf{sink} (net inward convergence).
+    \item $\vec{\nabla} \cdot V(x) = 0$: The fluid field is \textbf{incompressible} (solenoidal).
+\end{itemize}
+\end{remarque}
+
+\begin{exemple}[Direct Computation of Divergence]
+Let $F : \mathbb{R}^3 \to \mathbb{R}^3$ be given by $F(x, y, z) = \big(x^2 - e^y, \, \sin(xz), \, y^2 e^{2xz}\big)$. Then:
+\begin{align}
+    \mathrm{div}\,F(x, y, z) &= \pdv{}{x}\left(x^2 - e^y\right) + \pdv{}{y}\big(\sin(xz)\big) + \pdv{}{z}\left(y^2 e^{2xz}\right) \nonumber \\
+    &= 2x + 0 + 2x y^2 e^{2xz} \nonumber \\
+    &= 2x\left(1 + y^2 e^{2xz}\right).
+\end{align}
+\end{exemple}
+
+\begin{exemple}[Divergence of an Inverse-Square Central Force Field]
+Let $P_0 = (0, 0, 0)$, $r = \sqrt{x^2 + y^2 + z^2}$, and consider the central force field $F : \mathbb{R}^3 \setminus \{(0,0,0)\} \to \mathbb{R}^3$:
+\begin{equation}
+    F(x, y, z) = -\frac{C}{r^3} (x, y, z) = \left( -\frac{Cx}{r^3}, \, -\frac{Cy}{r^3}, \, -\frac{Cz}{r^3} \right).
+\end{equation}
+Differentiating the first component $F_1 = -C x r^{-3}$ with respect to $x$:
+\begin{align}
+    \pdv{F_1}{x} &= -C \left( \frac{1}{r^3} - \frac{3x}{r^4} \pdv{r}{x} \right) = -C \left( \frac{1}{r^3} - \frac{3x^2}{r^5} \right) = \frac{C(3x^2 - r^2)}{r^5}.
+\end{align}
+By identical permutation for $y$ and $z$:
+\begin{equation}
+    \pdv{F_2}{y} = \frac{C(3y^2 - r^2)}{r^5}, \qquad \pdv{F_3}{z} = \frac{C(3z^2 - r^2)}{r^5}.
+\end{equation}
+Summing the three partial derivatives:
+\begin{align}
+    \mathrm{div}\,F &= \frac{C}{r^5} \Big( (3x^2 - r^2) + (3y^2 - r^2) + (3z^2 - r^2) \Big) \nonumber \\
+    &= \frac{C}{r^5} \Big( 3(x^2 + y^2 + z^2) - 3r^2 \Big) = \frac{C}{r^5}(3r^2 - 3r^2) = 0.
+\end{align}
+Thus, the inverse-square gravitational field is divergence-free on its entire domain of definition $\mathbb{R}^3 \setminus \{(0,0,0)\}$.
+\end{exemple}
+
+---
+
+\section{The Curl Operator (Rotor)}
+
+\begin{definition}{Curl Operator}{curl_def}
+Let $\Omega \subset \mathbb{R}^n$ be an open domain and let $F : \Omega \to \mathbb{R}^n$ be a vector field of class $\mathcal{C}^1(\Omega, \mathbb{R}^n)$. The \textbf{curl} operator (also denoted $\mathrm{rot}\,F$ or $\vec{\nabla} \times F$) is defined as follows:
+
+\begin{itemize}
+    \item \textbf{In 2D} ($n = 2$), for $F = (F_1, F_2) : \Omega \subset \mathbb{R}^2 \to \mathbb{R}^2$, the scalar curl is:
+    \begin{equation}
+        \mathrm{curl}\,F(x, y) = \pdv{F_2}{x}(x, y) - \pdv{F_1}{y}(x, y) \in \mathbb{R}.
+    \end{equation}
+    \item \textbf{In 3D} ($n = 3$), for $F = (F_1, F_2, F_3) : \Omega \subset \mathbb{R}^3 \to \mathbb{R}^3$, the curl is a vector field:
+    \begin{equation}
+        \mathrm{curl}\,F(x, y, z) = \left( \pdv{F_3}{y} - \pdv{F_2}{z}, \, \pdv{F_1}{z} - \pdv{F_3}{x}, \, \pdv{F_2}{x} - \pdv{F_1}{y} \right) \in \mathbb{R}^3.
+    \end{equation}
+\end{itemize}
+\end{definition}
+
+\begin{remarque}[Formal Determinant Representation]
+In $\mathbb{R}^3$, the curl can be computed via the formal cross product with nabla using a symbolic $3 \times 3$ determinant:
+\begin{equation}
+    \vec{\nabla} \times F = 
+    \begin{vmatrix}
+        \bm{e}_x & \bm{e}_y & \bm{e}_z \\
+        \pdv{}{x} & \pdv{}{y} & \pdv{}{z} \\
+        F_1 & F_2 & F_3
+    \end{vmatrix}
+    = \left( \pdv{F_3}{y} - \pdv{F_2}{z} \right) \bm{e}_x + \left( \pdv{F_1}{z} - \pdv{F_3}{x} \right) \bm{e}_y + \left( \pdv{F_2}{x} - \pdv{F_1}{y} \right) \bm{e}_z.
+\end{equation}
+Furthermore, if $F$ is strictly two-dimensional embedded in 3D, such that $F_3 = 0$ and $\pdv{F_1}{z} = \pdv{F_2}{z} = 0$, then:
+\begin{equation}
+    \vec{\nabla} \times F = \Big( 0, \, 0, \, \mathrm{curl}_{2D}(F_1, F_2) \Big).
+\end{equation}
+\end{remarque}
+
+\begin{exemple}[Curl of an Inverse-Square Central Force Field]
+Let $F(x, y, z) = -\frac{C}{r^3}(x, y, z)$ on $\mathbb{R}^3 \setminus \{(0,0,0)\}$, where $r = \sqrt{x^2+y^2+z^2}$. Computing the first component of $\vec{\nabla} \times F$:
+\begin{align}
+    (\vec{\nabla} \times F)_1 &= \pdv{}{y}\left(-\frac{C z}{r^3}\right) - \pdv{}{z}\left(-\frac{C y}{r^3}\right) \nonumber \\
+    &= -C z \left(-\frac{3}{r^4} \pdv{r}{y}\right) - \left[ -C y \left(-\frac{3}{r^4} \pdv{r}{z}\right) \right] \nonumber \\
+    &= \frac{3C z y}{r^5} - \frac{3C y z}{r^5} = 0.
+\end{align}
+By identical cyclic permutations:
+\begin{equation}
+    (\vec{\nabla} \times F)_2 = \frac{3C(x z - z x)}{r^5} = 0, \qquad (\vec{\nabla} \times F)_3 = \frac{3C(y x - x y)}{r^5} = 0.
+\end{equation}
+Hence:
+\begin{equation}
+    \vec{\nabla} \times F = \begin{pmatrix} 0 \\ 0 \\ 0 \end{pmatrix}.
+\end{equation}
+An inverse-square central force field is strictly \textbf{irrotational}.
+\end{exemple}
+
+---
+
+\section{The Laplacian Operator}
+
+\begin{definition}{Laplacian of a Scalar Field}{laplacian_def}
+Let $\Omega \subset \mathbb{R}^n$ be an open domain and let $f : \Omega \to \mathbb{R}$ be a scalar field such that $f \in \mathcal{C}^2(\Omega)$. The \textbf{Laplacian} operator of $f$, denoted by $\Delta f$ or $\nabla^2 f$, is defined by:
+\begin{equation}
+    \Delta f(x) = \sum_{i=1}^n \pdv[2]{f}{x_i}(x) = \pdv[2]{f}{x_1}(x) + \pdv[2]{f}{x_2}(x) + \dots + \pdv[2]{f}{x_n}(x) \in \mathbb{R}.
+\end{equation}
+The Laplacian can be viewed as the divergence of the gradient:
+\begin{equation}
+    \Delta f = \vec{\nabla} \cdot (\vec{\nabla} f) = \mathrm{div}(\mathrm{grad}\,f).
+\end{equation}
+\end{definition}
+
+\begin{exemple}[Laplacian of the Gravitational Potential]
+Let $f : \mathbb{R}^3 \setminus \{(0,0,0)\} \to \mathbb{R}$ be the gravitational potential $f(x, y, z) = \frac{C}{r}$, with $r = \sqrt{x^2 + y^2 + z^2}$. First, evaluate the first-order partial derivative:
+\begin{equation}
+    \pdv{f}{x} = \frac{\dd}{\dd r}\left(\frac{C}{r}\right) \pdv{r}{x} = -\frac{C}{r^2} \cdot \frac{x}{r} = -\frac{C x}{r^3}.
+\end{equation}
+Computing the second derivative with respect to $x$:
+\begin{align}
+    \pdv[2]{f}{x} &= \pdv{}{x}\left(-\frac{C x}{r^3}\right) = -C \left( \frac{1}{r^3} - \frac{3x}{r^4} \pdv{r}{x} \right) = \frac{C(3x^2 - r^2)}{r^5}.
+\end{align}
+Summing the second derivatives along all three Cartesian directions:
+\begin{align}
+    \Delta f &= \pdv[2]{f}{x} + \pdv[2]{f}{y} + \pdv[2]{f}{z} \nonumber \\
+    &= \frac{C}{r^5} \Big( (3x^2 - r^2) + (3y^2 - r^2) + (3z^2 - r^2) \Big) \nonumber \\
+    &= \frac{C}{r^5} \Big( 3(x^2 + y^2 + z^2) - 3r^2 \Big) = 0.
+\end{align}
+Therefore, outside the origin, the gravitational potential satisfies Laplace's equation $\Delta f = 0$ and is a \textbf{harmonic function}.
+\end{exemple}
