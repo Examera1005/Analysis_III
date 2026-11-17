@@ -1,0 +1,177 @@
+
+
+\chapter{Week 2 Combinations of Operators and lines integrals}
+
+From the three first-order operators acting on scalar fields ($\mathcal{S}$) and vector fields ($\mathcal{V}$), five valid binary second-order compositions arise:
+\begin{equation*}
+    \begin{array}{rcccl}
+        \operatorname{div} \operatorname{grad} &:& \mathcal{S} \longrightarrow \mathcal{S} & \quad & \text{Divergence of a gradient (Scalar Laplacian)} \\
+        \operatorname{curl} \operatorname{grad} &:& \mathcal{S} \longrightarrow \mathcal{V} & \quad & \text{Curl of a gradient} \\
+        \operatorname{grad} \operatorname{div}  &:& \mathcal{V} \longrightarrow \mathcal{V} & \quad & \text{Gradient of a divergence} \\
+        \operatorname{div} \operatorname{curl}  &:& \mathcal{V} \longrightarrow \mathcal{S} & \quad & \text{Divergence of a curl} \\
+        \operatorname{curl} \operatorname{curl} &:& \mathcal{V} \longrightarrow \mathcal{V} & \quad & \text{Curl of a curl}
+    \end{array}
+\end{equation*}
+Note that configurations such as $\grad \grad$, $\dive \dive$, or $\rot \dive$ are syntactically undefined on standard tensor-order spaces without entering higher-order multilinear tensors.
+
+\begin{theoreme}{Null Identities of Second Order}{second_order_null}
+Let $U \subset \R^3$ be open.
+\begin{enumerate}[label=\upshape(\Roman*)]
+    \item For every $f \in \mathcal{C}^2(U, \R)$:
+    \begin{equation}
+        \rot (\grad f) = \bm{0}.
+    \end{equation}
+    \item For every $\bm{F} \in \mathcal{C}^2(U, \R^3)$:
+    \begin{equation}
+        \dive (\rot \bm{F}) = 0.
+    \end{equation}
+\end{enumerate}
+\end{theoreme}
+
+\begin{demonstration}[Proof of Identity (I)]
+Let $f \in \mathcal{C}^2(U, \R)$. By Definition~\ref{def:nabla_ops}, the components of $\grad f$ are $G_k = \partial_k f$. Computing the curl of $\bm{G} = \grad f$ via the Levi-Civita symbol:
+\begin{equation*}
+    \bigl[ \rot (\grad f) \bigr]_i = \sum_{j,k=1}^3 \varepsilon_{ijk} \partial_j (\partial_k f) = \sum_{j,k=1}^3 \varepsilon_{ijk} \frac{\partial^2 f}{\partial x_j \partial x_k}.
+\end{equation*}
+By Schwarz's theorem (Clairaut's theorem on the equality of mixed partials), the Hessian matrix is symmetric for $\mathcal{C}^2$ fields:
+\begin{equation*}
+    \frac{\partial^2 f}{\partial x_j \partial x_k} = \frac{\partial^2 f}{\partial x_k \partial x_j}.
+\end{equation*}
+The Levi-Civita symbol is completely antisymmetric under index exchange: $\varepsilon_{ijk} = -\varepsilon_{ikj}$. Relabeling the dummy indices $j \leftrightarrow k$:
+\begin{equation*}
+    \sum_{j,k=1}^3 \varepsilon_{ijk} \partial_j \partial_k f = -\sum_{j,k=1}^3 \varepsilon_{ikj} \partial_k \partial_j f = -\sum_{j,k=1}^3 \varepsilon_{ijk} \partial_j \partial_k f \implies \sum_{j,k=1}^3 \varepsilon_{ijk} \partial_j \partial_k f = 0,
+\end{equation*}
+for every $i \in \{1, 2, 3\}$. Thus, $\rot (\grad f) = \bm{0}$.
+\end{demonstration}
+
+\begin{demonstration}[Proof of Identity (II)]
+Let $\bm{F} \in \mathcal{C}^2(U, \R^3)$. Computing the divergence of its curl:
+\begin{equation*}
+    \dive (\rot \bm{F}) = \sum_{i=1}^3 \partial_i \bigl[ \rot \bm{F} \bigr]_i = \sum_{i=1}^3 \partial_i \left( \sum_{j,k=1}^3 \varepsilon_{ijk} \partial_j F_k \right) = \sum_{i,j,k=1}^3 \varepsilon_{ijk} \frac{\partial^2 F_k}{\partial x_i \partial x_j}.
+\end{equation*}
+By Schwarz's theorem, $\partial_i \partial_j F_k = \partial_j \partial_i F_k$ for each component $F_k \in \mathcal{C}^2(U)$. Contraction of the symmetric tensor $\partial_i \partial_j F_k$ with the antisymmetric tensor $\varepsilon_{ijk}$ over indices $i$ and $j$ identically vanishes:
+\begin{equation*}
+    \sum_{i,j=1}^3 \varepsilon_{ijk} \partial_i \partial_j F_k = \frac{1}{2} \sum_{i,j=1}^3 \underbrace{(\varepsilon_{ijk} + \varepsilon_{jik})}_{= 0} \partial_i \partial_j F_k = 0.
+\end{equation*}
+Summing over $k \in \{1, 2, 3\}$ yields $\dive (\rot \bm{F}) = 0$.
+\end{demonstration}
+
+\begin{theoreme}{Vector Laplacian and Curl-of-Curl Identity}{curl_curl}
+For every vector field $\bm{F} \in \mathcal{C}^2(U, \R^3)$, the following identity holds:
+\begin{equation}
+    \rot (\rot \bm{F}) = \grad (\dive \bm{F}) - \laplacian \bm{F}.
+\end{equation}
+Equivalently, the vector Laplacian satisfies $\laplacian \bm{F} = \grad (\dive \bm{F}) - \rot (\rot \bm{F})$.
+\end{theoreme}
+
+\begin{demonstration}
+We use index notation and the fundamental contraction relation between the Levi-Civita symbol and the Kronecker delta:
+\begin{equation*}
+    \sum_{k=1}^3 \varepsilon_{kij} \varepsilon_{klm} = \delta_{il} \delta_{jm} - \delta_{im} \delta_{jl}.
+\end{equation*}
+Let $\bm{W} = \rot \bm{F}$, such that $W_k = \sum_{l,m=1}^3 \varepsilon_{klm} \partial_l F_m$. The $i$-th component of $\rot \bm{W} = \rot (\rot \bm{F})$ is:
+\begin{align*}
+    \bigl[ \rot (\rot \bm{F}) \bigr]_i &= \sum_{j,k=1}^3 \varepsilon_{ijk} \partial_j W_k \\
+    &= \sum_{j,k=1}^3 \varepsilon_{ijk} \partial_j \left( \sum_{l,m=1}^3 \varepsilon_{klm} \partial_l F_m \right) \\
+    &= \sum_{j,l,m=1}^3 \left( \sum_{k=1}^3 \varepsilon_{kij} \varepsilon_{klm} \right) \partial_j \partial_l F_m.
+\end{align*}
+Applying the $\varepsilon$--$\delta$ identity:
+\begin{align*}
+    \bigl[ \rot (\rot \bm{F}) \bigr]_i &= \sum_{j,l,m=1}^3 (\delta_{il} \delta_{jm} - \delta_{im} \delta_{jl}) \partial_j \partial_l F_m \\
+    &= \sum_{j,l,m=1}^3 \delta_{il} \delta_{jm} \partial_j \partial_l F_m - \sum_{j,l,m=1}^3 \delta_{im} \delta_{jl} \partial_j \partial_l F_m \\
+    &= \sum_{j=1}^3 \partial_j \partial_i F_j - \sum_{j=1}^3 \partial_j \partial_j F_i.
+\end{align*}
+Invoking Schwarz's theorem to commute $\partial_j \partial_i = \partial_i \partial_j$:
+\begin{align*}
+    \bigl[ \rot (\rot \bm{F}) \bigr]_i &= \partial_i \left( \sum_{j=1}^3 \partial_j F_j \right) - \left( \sum_{j=1}^3 \pdv[2]{}{x_j} \right) F_i \\
+    &= \partial_i (\dive \bm{F}) - \laplacian F_i \\
+    &= \bigl[ \grad (\dive \bm{F}) \bigr]_i - \bigl[ \laplacian \bm{F} \bigr]_i.
+\end{align*}
+Since this equality holds for all components $i \in \{1, 2, 3\}$, we obtain:
+\begin{equation*}
+    \rot (\rot \bm{F}) = \grad (\dive \bm{F}) - \laplacian \bm{F}. \qedhere
+\end{equation*}
+\end{demonstration}
+
+\section{Leibniz Product Rules Involving Differential Operators}
+
+\begin{proposition}{Product Rules for Nabla Actions}{leibniz_rules}
+Let $f, g \in \mathcal{C}^1(U, \R)$ and $\bm{F}, \bm{G} \in \mathcal{C}^1(U, \R^3)$. Then:
+\begin{align}
+    \operatorname{grad}(fg) &= f \operatorname{grad} g + g \operatorname{grad} f, \\
+    \operatorname{div}(f \bm{F}) &= f (\operatorname{div} \bm{F}) + \inner{\operatorname{grad} f}{\bm{F}}, \\
+    \operatorname{curl}(f \bm{F}) &= f (\operatorname{curl} \bm{F}) + (\operatorname{grad} f) \times \bm{F}, \\
+    \operatorname{div}(\bm{F} \times \bm{G}) &= \inner{\bm{G}}{\operatorname{curl} \bm{F}} - \inner{\bm{F}}{\operatorname{curl} \bm{G}}, \\
+    \laplacian (fg) &= f \laplacian g + 2 \inner{\operatorname{grad} f}{\operatorname{grad} g} + g \laplacian f \quad (\text{for } f, g \in \mathcal{C}^2).
+\end{align}
+\end{proposition}
+
+\begin{demonstration}[Proof of the Product Rule for the Laplacian (Eq. 2.10)]
+Using $\laplacian(fg) = \operatorname{div} \bigl( \operatorname{grad} (fg) \bigr)$:
+\begin{align*}
+    \laplacian (fg) &= \operatorname{div} \bigl( f \operatorname{grad} g + g \operatorname{grad} f \bigr) \\
+    &= \operatorname{div} (f \operatorname{grad} g) + \operatorname{div} (g \operatorname{grad} f).
+\end{align*}
+Applying identity (2.7) with $\bm{F} = \operatorname{grad} g$ and $\bm{F} = \operatorname{grad} f$:
+\begin{align*}
+    \operatorname{div} (f \operatorname{grad} g) &= f \operatorname{div}(\operatorname{grad} g) + \inner{\operatorname{grad} f}{\operatorname{grad} g} = f \laplacian g + \inner{\operatorname{grad} f}{\operatorname{grad} g}, \\
+    \operatorname{div} (g \operatorname{grad} f) &= g \operatorname{div}(\operatorname{grad} f) + \inner{\operatorname{grad} g}{\operatorname{grad} f} = g \laplacian f + \inner{\operatorname{grad} f}{\operatorname{grad} g}.
+\end{align*}
+Summing both equations yields:
+\begin{equation*}
+    \laplacian (fg) = f \laplacian g + 2 \inner{\operatorname{grad} f}{\operatorname{grad} g} + g \laplacian f. \qedhere
+\end{equation*}
+\end{demonstration}
+
+\section{Curves and Line Integrals}
+
+\begin{definition}{Parametric Curve and Regularity}{curve_param}
+Let $I = [a, b] \subset \R$ be a compact interval.
+\begin{enumerate}[label=\upshape(\roman*)]
+    \item A parameterized \textbf{curve} in $\R^n$ is a continuous map:
+    \begin{align*}
+        \gamma \colon [a, b] &\longrightarrow \R^n \\
+        t &\longmapsto \gamma(t) = \bigl(\gamma_1(t), \dots, \gamma_n(t)\bigr).
+    \end{align*}
+    The set of points $\Gamma = \gamma([a, b]) \subset \R^n$ is the \textbf{trace} (or geometric image) of the curve.
+    \item The curve is said to be of class $\mathcal{C}^1$ (smooth) if each component $\gamma_i$ is continuously differentiable on $[a, b]$ (with one-sided derivatives at the endpoints).
+    \item A $\mathcal{C}^1$ curve is called \textbf{regular} if its velocity vector does not vanish:
+    \begin{equation}
+        \gamma'(t) = \left( \frac{\dd \gamma_1}{\dd t}(t), \dots, \frac{\dd \gamma_n}{\dd t}(t) \right) \neq \mathbf{0}, \quad \forall t \in (a, b).
+    \end{equation}
+\end{enumerate}
+\end{definition}
+
+\begin{definition}{Piecewise Smooth Curves}{piecewise_curve}
+A curve $\gamma \colon [a, b] \to \R^n$ is said to be \textbf{piecewise $\mathcal{C}^1$} (or piecewise smooth) if there exists a finite partition:
+\begin{equation}
+    a = t_0 < t_1 < t_2 < \dots < t_k = b,
+\end{equation}
+such that the restriction $\gamma|_{[t_{j-1}, t_j]}$ is of class $\mathcal{C}^1$ for each $j \in \{1, \dots, k\}$.
+\end{definition}
+
+\begin{definition}{Arc Length and Differential Line Element}{arc_length}
+For a regular $\mathcal{C}^1$ curve $\gamma \colon [a, b] \to \R^n$, the \textbf{infinitesimal element of arc length} $\dd\ell$ is given by:
+\begin{equation}
+    \dd\ell = \norm{\gamma'(t)} \dt = \sqrt{\sum_{i=1}^n \left( \frac{\dd \gamma_i}{\dd t}(t) \right)^{\!2}} \dt.
+\end{equation}
+The total \textbf{length} $L(\Gamma)$ of the curve is defined by:
+\begin{equation}
+    L(\Gamma) = \int_{\Gamma} \dd\ell = \int_a^b \norm{\gamma'(t)} \dt.
+\end{equation}
+\end{definition}
+
+\begin{definition}{Line Integral of a Scalar Field}{line_integral_scalar}
+Let $\Gamma \subset \R^n$ be a curve parameterized by a regular map $\gamma \colon [a, b] \to \R^n$, and let $f \colon \Gamma \to \R$ be a continuous scalar field. The \textbf{line integral} (or path integral) of $f$ along $\Gamma$ is defined by:
+\begin{equation}
+    \int_{\Gamma} f \dd\ell = \int_a^b f(\gamma(t)) \, \norm{\gamma'(t)} \dt.
+\end{equation}
+If $\Gamma$ is a piecewise $\mathcal{C}^1$ curve composed of regular segments $\Gamma_1, \dots, \Gamma_k$, the integral is additive:
+\begin{equation}
+    \int_{\Gamma} f \dd\ell = \sum_{j=1}^k \int_{\Gamma_j} f \dd\ell = \sum_{j=1}^k \int_{t_{j-1}}^{t_j} f(\gamma(t)) \, \norm{\gamma'(t)} \dt.
+\end{equation}
+\end{definition}
+
+\begin{remarque}[Invariance Under Reparameterization]
+The scalar line integral $\int_{\Gamma} f \dd\ell$ depends exclusively on the geometric trace $\Gamma$ and the values of $f$ along it; it is independent of the choice of regular parameterization $\gamma$ and orientation-preserving or orientation-reversing diffeomorphisms of the parameter domain.
+\end{remarque}

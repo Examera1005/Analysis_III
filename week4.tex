@@ -1,0 +1,156 @@
+\chapter{Week 4 - Green's Theorem and Planar Vector Calculus}
+
+\section{Introduction and Motivations}
+
+Recall that if $\gamma \colon [0, 2\pi] \to \R^2$ is the standard positively oriented unit circle parameterized by $\gamma(t) = (\cos t, \sin t)$, its tangent vector is $\gamma'(t) = (-\sin t, \cos t)$. For a vector field $F(x,y) = (-y, x)$, evaluating the circulation around this closed path yields:
+\begin{align*}
+    \oint_{\gamma} F \cdot \dd\vec{\ell} &= \int_{0}^{2\pi} (-\sin t, \cos t) \cdot (-\sin t, \cos t) \dt \\
+    &= \int_{0}^{2\pi} \bigl(\sin^2 t + \cos^2 t\bigr) \dt \\
+    &= \int_{0}^{2\pi} 1 \dt = 2\pi \neq 0.
+\end{align*}
+The non-vanishing circulation demonstrates that $F$ is not conservative on $\R^2 \setminus \{(0,0)\}$. In this chapter, we establish \emph{Green's Theorem}, which connects line integrals along closed boundary curves in $\R^2$ to double integrals over the planar domains they enclose.
+
+\section{Notations and Geometric Preliminaries}
+
+Throughout this section, all definitions and results are set in the Euclidean plane $\R^2$ ($n = 2$).
+
+\begin{definition}{Topological Neighborhoods and Boundary}{topo_notations}
+Let $x \in \R^2$ and $r > 0$.
+\begin{enumerate}
+    \item The \textbf{open Euclidean disk} centered at $x$ of radius $r$ is denoted by:
+    \[D_r(x) \coloneqq \bigl\{ y \in \R^2 : \norm{x - y} < r \bigr\}.\]
+    \item For any subset $\Omega \subset \R^2$, the \textbf{boundary} of $\Omega$, denoted by $\partial\Omega$, is defined by:
+    \[\partial\Omega \coloneqq \bigl\{ x \in \R^2 : \forall r > 0, \; D_r(x) \cap \Omega \neq \emptyset \quad \text{and} \quad D_r(x) \cap \Omega^c \neq \emptyset \bigr\},\]
+    where $\Omega^c = \R^2 \setminus \Omega$ is the complement of $\Omega$.
+    \item The \textbf{closure} of $\Omega$, denoted by $\overline{\Omega}$, is defined as:
+    \[\overline{\Omega} \coloneqq \Omega \cup \partial\Omega.\]
+    Equivalently, it is the smallest closed set containing $\Omega$.
+\end{enumerate}
+\end{definition}
+
+\subsection{Orientation of a Boundary Curve}
+
+\begin{definition}{Orientation of a Boundary}{orientation}
+Let $\Omega \subset \R^2$ be an open bounded domain such that $\partial\Omega$ consists of a finite union of piecewise regular, simple, closed curves. 
+\begin{enumerate}
+    \item A boundary curve $\Gamma \subset \partial\Omega$ is said to be \textbf{positively oriented} if, as an observer traverses $\Gamma$ along its parameterization, the domain $\Omega$ consistently lies on the \textbf{left-hand side}.
+    \item The curve is said to be \textbf{negatively oriented} if the domain $\Omega$ lies on the \textbf{right-hand side}.
+\end{enumerate}
+\end{definition}
+
+\begin{remarque}[Inner vs. Outer Boundaries]
+For a bounded simply connected domain, positive orientation corresponds to traversing the outer boundary counterclockwise. However, for a multiply connected domain with ``holes'' (e.g., an annulus), traversing an \emph{inner} boundary curve so that the domain $\Omega$ remains on the left requires moving \textbf{clockwise}.
+\end{remarque}
+
+\subsection{Unit Tangent and Outward Normal Vectors}
+
+Let $\Gamma$ be a piecewise $C^1$ curve parameterized by $\gamma(t) = (\gamma_1(t), \gamma_2(t))$ for $t \in [a, b]$, with velocity vector $\gamma'(t) = (\gamma_1'(t), \gamma_2'(t)) \neq (0,0)$.
+
+\begin{definition}{Outward Unit Normal Vector}{normal_vector}
+If $\gamma$ provides a positive orientation for $\partial\Omega$, the \textbf{outward-pointing unit normal vector} $\vec{\nu}(t)$ along $\gamma(t)$ is obtained by rotating the unit tangent vector $\vec{T}(t) = \frac{\gamma'(t)}{\norm{\gamma'(t)}}$ by $90^\circ$ clockwise:
+\[\vec{\nu}(t) = \frac{1}{\norm{\gamma'(t)}} \bigl( \gamma_2'(t), \, -\gamma_1'(t) \bigr).\]
+Notice that:
+\[\vec{T}(t) \cdot \vec{\nu}(t) = \frac{1}{\norm{\gamma'(t)}^2} \bigl( \gamma_1'(t)\gamma_2'(t) - \gamma_2'(t)\gamma_1'(t) \bigr) = 0.\]
+\end{definition}
+
+\begin{exemple}[Circle Orientations]
+Consider the open unit disk $\Omega = \{ (x,y) \in \R^2 : x^2 + y^2 < 1 \}$ whose geometric boundary is the unit circle $\partial\Omega = \mathbb{S}^1 = \{ (x,y) \in \R^2 : x^2 + y^2 = 1 \}$.
+\begin{itemize}
+    \item \textbf{Positive Orientation:} $\gamma_1(t) = (\cos t, \sin t)$ for $t \in [0, 2\pi]$. The velocity is $\gamma_1'(t) = (-\sin t, \cos t)$. The outward normal is:
+    \[\vec{\nu}(t) = \frac{1}{1} (\cos t, -(-\sin t)) = (\cos t, \sin t),\]
+    which points outward away from the origin into $\Omega^c$.
+    \item \textbf{Negative Orientation:} $\gamma_2(t) = (\cos t, -\sin t)$ for $t \in [0, 2\pi]$. The traversal is clockwise, leaving $\Omega$ on the right.
+\end{itemize}
+\end{exemple}
+
+\subsection{Regular Domains}
+
+\begin{definition}{Regular Domain in $\R^2$}{regular_domain}
+A bounded open set $\Omega \subset \R^2$ is called a \textbf{regular domain} if there exist bounded open sets $\Omega_0, \Omega_1, \dots, \Omega_m \subset \R^2$ ($m \ge 0$) such that:
+\begin{enumerate}
+    \item For each $j \in \{1, \dots, m\}$, $\overline{\Omega}_j \subset \Omega_0$.
+    \item The inner domains are mutually disjoint: for all $i, j \in \{1, \dots, m\}$ with $i \neq j$, $\overline{\Omega}_i \cap \overline{\Omega}_j = \emptyset$.
+    \item The domain $\Omega$ is obtained by removing the internal components from $\Omega_0$:
+    \[\Omega = \Omega_0 \setminus \bigcup_{j=1}^m \overline{\Omega}_j.\]
+    \item The boundary of each component $\partial\Omega_j$ ($j = 0, \dots, m$) is a simple, closed, piecewise $C^1$ curve.
+\end{enumerate}
+The boundary of $\Omega$ is then $\partial\Omega = \partial\Omega_0 \cup \partial\Omega_1 \cup \dots \cup \partial\Omega_m$.
+\end{definition}
+
+\section{Green's Theorem}
+
+\begin{theoreme}{Green's Theorem}{greens_theorem}
+Let $\Omega \subset \R^2$ be a bounded regular domain whose boundary $\partial\Omega$ is oriented positively with respect to $\Omega$. Let $F = (F_1, F_2) \colon \overline{\Omega} \to \R^2$ be a vector field of class $C^1(\overline{\Omega}, \R^2)$. Then:
+\[\iint_{\Omega} \operatorname{curl} F(x, y) \dx\dy = \iint_{\Omega} \left( \pdv{F_2}{x}(x, y) - \pdv{F_1}{y}(x, y) \right) \dx\dy = \oint_{\partial\Omega} F \cdot \dd\vec{\ell},\]
+where $\dd\vec{\ell} = \gamma'(t) \dt = (\dd x, \dd y)^\top$, so that the line integral expands to $\oint_{\partial\Omega} F_1 \dx + F_2 \dy$.
+\end{theoreme}
+
+\begin{remarque}[Conservative Vector Fields]
+If $F$ derives from a scalar potential on a simply connected open set containing $\overline{\Omega}$ (i.e., $F = \grad \varphi$ for some $\varphi \in C^2$), then:
+\[\operatorname{curl} F = \pdv{F_2}{x} - \pdv{F_1}{y} = \pdv[2]{\varphi}{x \partial y} - \pdv[2]{\varphi}{y \partial x} = 0.\]
+By Green's theorem, we immediately recover:
+\[\oint_{\partial\Omega} F \cdot \dd\vec{\ell} = \iint_{\Omega} 0 \dx\dy = 0,\]
+which is consistent with the path-independence of conservative vector fields along closed contours.
+\end{remarque}
+
+\section{Worked Examples}
+
+\subsection{Verification of Green's Theorem on the Unit Disk}
+
+\begin{exemple}[Problem Statement]
+Let \(\Omega = \{ (x, y) \in \R^2 : x^2 + y^2 < 1 \}\) be the unit open disk with boundary \(\partial\Omega = \{ (x, y) \in \R^2 : x^2 + y^2 = 1 \}\) oriented counterclockwise. 
+
+Consider the \(C^1\) planar vector field:
+\[
+    F(x, y) = (y^2, \, x).
+\]
+Verify Green's theorem by evaluating the double integral of \(\operatorname{curl} F\) over \(\Omega\) and the line integral \(\oint_{\partial\Omega} F \cdot \dd\vec{\ell}\) independently.
+\end{exemple}
+
+\paragraph{Step 1: Evaluation of the Area Integral.}
+The two-dimensional curl of \(F = (F_1, F_2) = (y^2, x)\) is:
+\[
+    \operatorname{curl} F(x, y) = \pdv{F_2}{x} - \pdv{F_1}{y} = \pdv{}{x}(x) - \pdv{}{y}(y^2) = 1 - 2y.
+\]
+We integrate \(\operatorname{curl} F\) over the disk \(\Omega\) using polar coordinates \(x = r\cos\theta\), \(y = r\sin\theta\) with Jacobian determinant \(\dd x \dd y = r \dd r \dd\theta\):
+\begin{align*}
+    \iint_{\Omega} \operatorname{curl} F(x, y) \dx\dy 
+    &= \int_{0}^{2\pi} \int_{0}^{1} (1 - 2r\sin\theta) \, r \dr \d\theta \\
+    &= \int_{0}^{2\pi} \left[ \int_{0}^{1} r \dr - 2\sin\theta \int_{0}^{1} r^2 \dr \right] \d\theta \\
+    &= \int_{0}^{2\pi} \left( \frac{1}{2} - \frac{2}{3}\sin\theta \right) \d\theta \\
+    &= \frac{1}{2} \int_{0}^{2\pi} \dd\theta - \frac{2}{3} \int_{0}^{2\pi} \sin\theta \dd\theta.
+\end{align*}
+Since \(\int_{0}^{2\pi} \sin\theta \dd\theta = \bigl[-\cos\theta\bigr]_{0}^{2\pi} = 0\), we obtain:
+\[
+    \iint_{\Omega} \operatorname{curl} F(x, y) \dx\dy = \frac{1}{2}(2\pi) - 0 = \pi.
+\]
+
+\paragraph{Step 2: Evaluation of the Boundary Line Integral.}
+The boundary \(\partial\Omega\) oriented positively is parameterized by:
+\[
+    \gamma(t) = (\cos t, \sin t), \quad \gamma'(t) = (-\sin t, \cos t), \quad t \in [0, 2\pi].
+\]
+Evaluating the vector field along the path gives \(F(\gamma(t)) = (\sin^2 t, \cos t)\). Hence:
+\begin{align*}
+    \oint_{\partial\Omega} F \cdot \dd\vec{\ell} 
+    &= \int_{0}^{2\pi} F(\gamma(t)) \cdot \gamma'(t) \dt \\
+    &= \int_{0}^{2\pi} (\sin^2 t, \cos t) \cdot (-\sin t, \cos t) \dt \\
+    &= -\int_{0}^{2\pi} \sin^3 t \dt + \int_{0}^{2\pi} \cos^2 t \dt.
+\end{align*}
+
+We compute each term individually:
+\begin{itemize}
+    \item \textbf{Odd power integral:} Using \(\sin^2 t = 1 - \cos^2 t\):
+    \[
+        \int_{0}^{2\pi} \sin^3 t \dt = \int_{0}^{2\pi} (1 - \cos^2 t) \sin t \dt = \left[ -\cos t + \frac{\cos^3 t}{3} \right]_{0}^{2\pi} = 0.
+    \]
+    \item \textbf{Even power integral:} Using the half-angle formula \(\cos^2 t = \frac{1 + \cos(2t)}{2}\):
+    \[
+        \int_{0}^{2\pi} \cos^2 t \dt = \int_{0}^{2\pi} \frac{1 + \cos(2t)}{2} \dt = \frac{1}{2}(2\pi) + \left[ \frac{\sin(2t)}{4} \right]_{0}^{2\pi} = \pi.
+    \]
+\end{itemize}
+Combining the results yields:
+\[
+    \oint_{\partial\Omega} F \cdot \dd\vec{\ell} = 0 + \pi = \pi.
+\]
+Both sides agree with \(\pi\), verifying Green's theorem on the disk.

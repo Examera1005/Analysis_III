@@ -1,0 +1,271 @@
+\chapter{Week 8 - Fourier Series}
+
+\section{Introduction}
+
+\subsection{Motivation}
+
+\begin{itemize}
+    \item \textbf{Taylor series:} Provides a local representation of a function $f: \R \to \R$ that is sufficiently regular ($C^\infty$) as an infinite sum of monomials:
+    \[
+    f(x) = \sum_{n=0}^\infty a_n x^n, \quad \text{where } a_n = \frac{f^{(n)}(0)}{n!} \quad \text{around } x = 0.
+    \]
+    For instance, $f(x) = \mathrm{e}^x = \sum_{n=0}^\infty \frac{x^n}{n!}$ for all $x \in \R$.
+    
+    \item \textbf{Fourier series:} Approximates and represents a periodic function by an infinite superposition of basic harmonic oscillations (sines and cosines). Given a $T$-periodic function $f: \R \to \R$, we seek an expansion of the form:
+    \[
+    f(x) \sim \frac{a_0}{2} + \sum_{n=1}^\infty \left[ a_n \cos\!\left(\frac{2\pi n}{T} x\right) + b_n \sin\!\left(\frac{2\pi n}{T} x\right) \right], \quad x \in \R.
+    \]
+\end{itemize}
+
+\subsection{Preliminary Definitions and Results}
+
+\begin{definition}{Periodicity}{periodicity}
+Let $T > 0$. A function $f: \R \to \R$ is said to be \textbf{$T$-periodic} if:
+\[
+f(x + T) = f(x), \quad \forall x \in \R.
+\]
+\end{definition}
+
+\begin{exemple}[Fundamental Harmonics]
+For any $n \in \N^* = \{1, 2, 3, \dots\}$, the trigonometric functions:
+\[
+u_n(x) = \cos\!\left(\frac{2\pi n}{T} x\right) \quad \text{and} \quad v_n(x) = \sin\!\left(\frac{2\pi n}{T} x\right)
+\]
+are periodic of period $\frac{T}{n}$, and therefore are also $T$-periodic. Indeed:
+\[
+u_n\!\left(x + \frac{T}{n}\right) = \cos\!\left(\frac{2\pi n}{T}\left(x + \frac{T}{n}\right)\right) = \cos\!\left(\frac{2\pi n}{T} x + 2\pi\right) = \cos\!\left(\frac{2\pi n}{T} x\right) = u_n(x).
+\]
+\end{exemple}
+
+\begin{definition}{Piecewise Continuous Function}{piecewise_continuous}
+A function $f: \R \to \R$ is \textbf{piecewise continuous} if:
+\begin{enumerate}
+    \item It has at most a finite number of discontinuities on every bounded interval $[a, b] \subset \R$.
+    \item At every point of discontinuity $x \in \R$, both the right-hand and left-hand limits exist and are finite:
+    \[
+    f(x+0) := \lim_{\substack{t \to x \\ t > x}} f(t) \quad \text{and} \quad f(x-0) := \lim_{\substack{t \to x \\ t < x}} f(t).
+    \]
+\end{enumerate}
+\end{definition}
+
+\begin{definition}{Piecewise $C^1$ Function}{piecewise_c1}
+A function $f: \R \to \R$ is said to be \textbf{piecewise $C^1$} if:
+\begin{enumerate}
+    \item $f$ is piecewise continuous on $\R$.
+    \item $f$ is continuously differentiable on each open subinterval between consecutive discontinuity points.
+    \item At every discontinuity point $x \in \R$, the one-sided derivative limits exist and are finite:
+    \[
+    f'(x+0) := \lim_{\substack{t \to x \\ t > x}} f'(t) \quad \text{and} \quad f'(x-0) := \lim_{\substack{t \to x \\ t < x}} f'(t).
+    \]
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}{Orthogonality Relations of Trigonometric Functions}{trig_orthogonality}
+Let $m, n \in \N^*$ and $T > 0$. The trigonometric system satisfies the following orthogonality identities:
+\begin{align}
+\frac{2}{T} \int_0^T \cos\!\left(\frac{2\pi n}{T} x\right) \cos\!\left(\frac{2\pi m}{T} x\right) \dx &= \begin{cases} 0 & \text{if } m \neq n, \\ 1 & \text{if } m = n, \end{cases} \label{eq:ortho_cos} \\
+\frac{2}{T} \int_0^T \sin\!\left(\frac{2\pi n}{T} x\right) \sin\!\left(\frac{2\pi m}{T} x\right) \dx &= \begin{cases} 0 & \text{if } m \neq n, \\ 1 & \text{if } m = n, \end{cases} \label{eq:ortho_sin} \\
+\frac{2}{T} \int_0^T \sin\!\left(\frac{2\pi n}{T} x\right) \cos\!\left(\frac{2\pi m}{T} x\right) \dx &= 0, \quad \forall m, n \in \N^*. \label{eq:ortho_sincos}
+\end{align}
+\end{proposition}
+
+\begin{demonstration}
+Without loss of generality, assume $T = 2\pi$ via the change of variable $\theta = \frac{2\pi}{T} x$.
+\begin{itemize}
+    \item \textbf{Identity \eqref{eq:ortho_cos}:} Using the product-to-sum formula $\cos(a)\cos(b) = \frac{1}{2}[\cos(a-b) + \cos(a+b)]$:
+    \[
+    I = \frac{1}{\pi} \int_0^{2\pi} \cos(nx)\cos(mx) \dx = \frac{1}{2\pi} \int_0^{2\pi} \cos((n-m)x) \dx + \frac{1}{2\pi} \int_0^{2\pi} \cos((n+m)x) \dx.
+    \]
+    If $m \neq n$, since $n-m \neq 0$ and $n+m \neq 0$:
+    \[
+    I = \frac{1}{2\pi} \left[ \frac{\sin((n-m)x)}{n-m} \right]_0^{2\pi} + \frac{1}{2\pi} \left[ \frac{\sin((n+m)x)}{n+m} \right]_0^{2\pi} = 0 + 0 = 0.
+    \]
+    If $m = n$:
+    \[
+    I = \frac{1}{2\pi} \int_0^{2\pi} 1 \dx + \frac{1}{2\pi} \left[ \frac{\sin(2nx)}{2n} \right]_0^{2\pi} = \frac{2\pi}{2\pi} + 0 = 1.
+    \]
+    \item \textbf{Identity \eqref{eq:ortho_sincos}:} Using $\sin(a)\cos(b) = \frac{1}{2}[\sin(a-b) + \sin(a+b)]$:
+    \[
+    I = \frac{1}{\pi} \int_0^{2\pi} \sin(nx)\cos(mx) \dx = \frac{1}{2\pi} \int_0^{2\pi} \sin((n-m)x) \dx + \frac{1}{2\pi} \int_0^{2\pi} \sin((n+m)x) \dx.
+    \]
+    If $m \neq n$:
+    \[
+    I = \frac{1}{2\pi} \left[ -\frac{\cos((n-m)x)}{n-m} \right]_0^{2\pi} + \frac{1}{2\pi} \left[ -\frac{\cos((n+m)x)}{n+m} \right]_0^{2\pi} = 0 + 0 = 0.
+    \]
+    If $m = n$, $\sin((n-m)x) = \sin(0) = 0$, giving again $I = 0$.
+\end{itemize}
+Identity \eqref{eq:ortho_sin} is established identically using $\sin(a)\sin(b) = \frac{1}{2}[\cos(a-b) - \cos(a+b)]$.
+\end{demonstration}
+
+\begin{lemme}{Integration of Periodic Functions}{periodic_integral}
+Let $f: \R \to \R$ be a $T$-periodic, piecewise continuous function. Then the integral of $f$ over any interval of length $T$ is invariant:
+\[
+\int_a^{a+T} f(x) \dx = \int_0^T f(x) \dx, \quad \forall a \in \R.
+\]
+\end{lemme}
+
+\begin{demonstration}
+Split the integral at the boundary points $0$ and $T$:
+\[
+\int_a^{a+T} f(x) \dx = \int_a^0 f(x) \dx + \int_0^T f(x) \dx + \int_T^{a+T} f(x) \dx.
+\]
+In the third integral, substitute $x = y + T$ so that $\dd x = \dd y$. Since $f$ is $T$-periodic, $f(y+T) = f(y)$:
+\[
+\int_T^{a+T} f(x) \dx = \int_0^a f(y+T) \dd y = \int_0^a f(y) \dd y.
+\]
+Consequently:
+\[
+\int_a^{a+T} f(x) \dx = -\int_0^a f(x) \dx + \int_0^T f(x) \dx + \int_0^a f(y) \dd y = \int_0^T f(x) \dx.
+\]
+\end{demonstration}
+
+\section{Fourier Series of a Periodic Function}
+
+\subsection{Definition and Fourier Coefficients}
+
+\begin{definition}{Fourier Series and Partial Sums}{fourier_series}
+Let $f: \R \to \R$ be a $T$-periodic, piecewise continuous function.
+\begin{enumerate}
+    \item For any integer $N \ge 1$, the \textbf{Fourier partial sum of order $N$} of $f$ is defined by:
+    \[
+    \mathcal{F}_N f(x) = \frac{a_0}{2} + \sum_{n=1}^N \left[ a_n \cos\!\left(\frac{2\pi n}{T} x\right) + b_n \sin\!\left(\frac{2\pi n}{T} x\right) \right],
+    \]
+    where the real scalars $a_n$ ($n \ge 0$) and $b_n$ ($n \ge 1$) are the \textbf{Fourier coefficients} of $f$, defined by:
+    \begin{align*}
+    a_n &= \frac{2}{T} \int_0^T f(x) \cos\!\left(\frac{2\pi n}{T} x\right) \dx \quad (n \ge 0), \\
+    b_n &= \frac{2}{T} \int_0^T f(x) \sin\!\left(\frac{2\pi n}{T} x\right) \dx \quad (n \ge 1).
+    \end{align*}
+    \item The \textbf{Fourier series} of $f$ is the formal pointwise limit as $N \to \infty$:
+    \[
+    \mathcal{F}f(x) := \lim_{N \to \infty} \mathcal{F}_N f(x) = \frac{a_0}{2} + \sum_{n=1}^\infty \left[ a_n \cos\!\left(\frac{2\pi n}{T} x\right) + b_n \sin\!\left(\frac{2\pi n}{T} x\right) \right].
+    \]
+\end{enumerate}
+\end{definition}
+
+\begin{remarque}[Choice of the Constant Term $\frac{a_0}{2}$]
+Setting $n = 0$ in the formula for $a_n$ gives $a_0 = \frac{2}{T} \int_0^T f(x) \dx$. The constant term in the expansion is therefore:
+\[
+\frac{a_0}{2} = \frac{1}{T} \int_0^T f(x) \dx,
+\]
+which represents exactly the mean value of $f$ over one period.
+\end{remarque}
+
+\subsection{Heuristic Justification: Hilbert Space Projection}
+
+To understand the algebraic structure underlying Fourier coefficients, set $T = 2\pi$ for simplicity. Let $V$ denote the real vector space of continuous $2\pi$-periodic functions $g: \R \to \R$.
+
+Equip $V$ with the $L^2$-inner product:
+\[
+\inner{f}{g} := \frac{1}{\pi} \int_0^{2\pi} f(x) g(x) \dx.
+\]
+By the orthogonality relations (Proposition \ref{prop:trig_orthogonality}):
+\begin{align*}
+\inner{\cos(nx)}{\cos(mx)} &= \delta_{nm}, \\
+\inner{\sin(nx)}{\sin(mx)} &= \delta_{nm}, \\
+\inner{\cos(nx)}{\sin(mx)} &= 0.
+\end{align*}
+For the constant basis function $u_0(x) \equiv 1$:
+\[
+\inner{1}{1} = \frac{1}{\pi} \int_0^{2\pi} 1 \dx = 2, \quad \inner{\cos(nx)}{1} = 0, \quad \inner{\sin(nx)}{1} = 0.
+\]
+Assuming the trigonometric family $\{1, \cos(nx), \sin(nx)\}_{n \ge 1}$ forms an orthogonal basis of $V$, any function $f \in V$ decomposes into its orthogonal projection components:
+\[
+f(x) = c \cdot 1 + \sum_{n=1}^\infty \left[ a_n \cos(nx) + b_n \sin(nx) \right],
+\]
+where the coefficients are given by:
+\begin{align*}
+c &= \frac{\inner{f}{1}}{\inner{1}{1}} = \frac{\frac{1}{\pi} \int_0^{2\pi} f(x) \dx}{2} = \frac{a_0}{2}, \\
+a_n &= \frac{\inner{f}{\cos(nx)}}{\inner{\cos(nx)}{\cos(nx)}} = \frac{1}{\pi} \int_0^{2\pi} f(x) \cos(nx) \dx, \\
+b_n &= \frac{\inner{f}{\sin(nx)}}{\inner{\sin(nx)}{\sin(nx)}} = \frac{1}{\pi} \int_0^{2\pi} f(x) \sin(nx) \dx.
+\end{align*}
+
+\subsection{Convergence of Fourier Series}
+
+\begin{theoreme}{Dirichlet's Theorem}{dirichlet}
+Let $f: \R \to \R$ be a $T$-periodic, \textbf{piecewise $C^1$} function. Then for every $x \in \R$, the Fourier series converges pointwisely:
+\[
+\mathcal{F}f(x) = \lim_{N \to \infty} \mathcal{F}_N f(x) = \frac{f(x+0) + f(x-0)}{2}.
+\]
+In particular, at every point $x \in \R$ where $f$ is continuous:
+\[
+\mathcal{F}f(x) = f(x).
+\]
+\end{theoreme}
+
+\begin{remarque}[Physical Interpretation]
+Dirichlet's theorem confirms that any piecewise $C^1$ signal can be synthesized exactly as a countable superposition of pure harmonics, with the Fourier series converging to the midpoint of the jump discontinuity at every point of discontinuity.
+\end{remarque}
+
+\subsection{Worked Examples}
+
+\begin{exemple}[Square Wave]
+Consider the $2\pi$-periodic function defined on $[0, 2\pi)$ by:
+\[
+f(x) = \begin{cases} 1 & \text{if } x \in [0, \pi), \\ 0 & \text{if } x \in [\pi, 2\pi). \end{cases}
+\]
+
+\textbf{1. Computation of the Fourier coefficients:}
+\begin{align*}
+a_0 &= \frac{1}{\pi} \int_0^{2\pi} f(x) \dx = \frac{1}{\pi} \int_0^\pi 1 \dx + \frac{1}{\pi} \int_\pi^{2\pi} 0 \dx = 1.
+\end{align*}
+For $n \ge 1$:
+\begin{align*}
+a_n &= \frac{1}{\pi} \int_0^{2\pi} f(x) \cos(nx) \dx = \frac{1}{\pi} \int_0^\pi \cos(nx) \dx = \frac{1}{\pi} \left[ \frac{\sin(nx)}{n} \right]_0^\pi = 0. \\
+b_n &= \frac{1}{\pi} \int_0^{2\pi} f(x) \sin(nx) \dx = \frac{1}{\pi} \int_0^\pi \sin(nx) \dx = \frac{1}{\pi} \left[ -\frac{\cos(nx)}{n} \right]_0^\pi \\
+    &= -\frac{1}{\pi n} \left( \cos(n\pi) - 1 \right) = \frac{1 - (-1)^n}{\pi n} = \begin{cases} 0 & \text{if } n \text{ is even}, \\ \dfrac{2}{\pi n} & \text{if } n \text{ is odd}. \end{cases}
+\end{align*}
+
+\textbf{2. Fourier series expansion:}
+Writing $n = 2k + 1$ with $k \ge 0$:
+\[
+\mathcal{F}f(x) = \frac{1}{2} + \frac{2}{\pi} \sum_{k=0}^\infty \frac{\sin((2k+1)x)}{2k+1}.
+\]
+
+\textbf{3. Dirichlet's theorem evaluation:}
+\begin{itemize}
+    \item On the open intervals $x \in (0, \pi)$ and $x \in (\pi, 2\pi)$, $f$ is continuous, hence $\mathcal{F}f(x) = f(x)$.
+    \item At the discontinuity points $x = 0$ and $x = \pi$:
+    \[
+    \mathcal{F}f(0) = \frac{f(0+0) + f(0-0)}{2} = \frac{1 + 0}{2} = \frac{1}{2},
+    \]
+    \[
+    \mathcal{F}f(\pi) = \frac{f(\pi+0) + f(\pi-0)}{2} = \frac{0 + 1}{2} = \frac{1}{2}.
+    \]
+\end{itemize}
+\end{exemple}
+
+\begin{exemple}[Sawtooth Wave]
+Consider the $2\pi$-periodic function defined on $[0, 2\pi)$ by:
+\[
+f(x) = x, \quad x \in [0, 2\pi).
+\]
+
+\textbf{1. Computation of the Fourier coefficients:}
+\[
+a_0 = \frac{1}{\pi} \int_0^{2\pi} x \dx = \frac{1}{\pi} \left[ \frac{x^2}{2} \right]_0^{2\pi} = \frac{4\pi^2}{2\pi} = 2\pi.
+\]
+For $n \ge 1$, we integrate by parts using $u = x \implies \dd u = \dd x$, and $\dd v = \cos(nx)\dx \implies v = \frac{\sin(nx)}{n}$:
+\begin{align*}
+a_n &= \frac{1}{\pi} \int_0^{2\pi} x \cos(nx) \dx = \frac{1}{\pi} \left( \left[ \frac{x \sin(nx)}{n} \right]_0^{2\pi} - \int_0^{2\pi} \frac{\sin(nx)}{n} \dx \right) \\
+    &= \frac{1}{\pi} \left( 0 + \left[ \frac{\cos(nx)}{n^2} \right]_0^{2\pi} \right) = \frac{1}{\pi n^2} (1 - 1) = 0.
+\end{align*}
+For $b_n$, integrate by parts with $u = x \implies \dd u = \dd x$, and $\dd v = \sin(nx)\dx \implies v = -\frac{\cos(nx)}{n}$:
+\begin{align*}
+b_n &= \frac{1}{\pi} \int_0^{2\pi} x \sin(nx) \dx = \frac{1}{\pi} \left( \left[ -\frac{x \cos(nx)}{n} \right]_0^{2\pi} + \int_0^{2\pi} \frac{\cos(nx)}{n} \dx \right) \\
+    &= \frac{1}{\pi} \left( -\frac{2\pi \cos(2\pi n)}{n} + 0 + \left[ \frac{\sin(nx)}{n^2} \right]_0^{2\pi} \right) = -\frac{2}{n}.
+\end{align*}
+
+\textbf{2. Fourier series expansion:}
+\[
+\mathcal{F}f(x) = \frac{a_0}{2} + \sum_{n=1}^\infty b_n \sin(nx) = \pi - 2 \sum_{n=1}^\infty \frac{\sin(nx)}{n}.
+\]
+
+\textbf{3. Dirichlet's theorem evaluation:}
+\begin{itemize}
+    \item For $x \in (0, 2\pi)$, $f$ is continuous: $\mathcal{F}f(x) = x$.
+    \item At $x = 0$ (and $x = 2k\pi$):
+    \[
+    \mathcal{F}f(0) = \frac{f(0+0) + f(0-0)}{2} = \frac{0 + 2\pi}{2} = \pi.
+    \]
+\end{itemize}
+\end{exemple}

@@ -1,0 +1,389 @@
+\chapter{Week 9 - Fourier Series: Complex Form, Properties, and Half-Range Expansions}
+
+\section{Review of Sawtooth Expansion and Complex Fourier Series}
+
+\subsection{Continuation of the Sawtooth Wave Example}
+
+Consider the $2\pi$-periodic function $f : \R \to \R$ defined on $[0, 2\pi)$ by $f(x) = x$. Having previously found $a_0 = 2\pi$ and $a_n = 0$ for all $n \ge 1$, we compute the sine coefficients $b_n$ for $n \ge 1$:
+\begin{align*}
+    b_n &= \frac{1}{\pi} \int_{0}^{2\pi} f(x) \sin(nx) \dx \\
+        &= \frac{1}{\pi} \int_{0}^{2\pi} x \sin(nx) \dx.
+\end{align*}
+Integrating by parts with $u = x$ ($\dd u = \dx$) and $\dd v = \sin(nx)\dx$ ($v = -\frac{\cos(nx)}{n}$), we obtain
+\begin{align*}
+    b_n &= \frac{1}{\pi} \left( \left[ -\frac{x \cos(nx)}{n} \right]_{0}^{2\pi} + \frac{1}{n} \int_{0}^{2\pi} \cos(nx) \dx \right) \\
+        &= \frac{1}{\pi} \left( -\frac{2\pi \cos(2\pi n)}{n} + 0 + \left[ \frac{\sin(nx)}{n^2} \right]_{0}^{2\pi} \right) = -\frac{2}{n}.
+\end{align*}
+Thus, the Fourier series of $f$ is
+\[
+    Ff(x) = \pi - 2 \sum_{n=1}^{\infty} \frac{\sin(nx)}{n}.
+\]
+By Dirichlet's theorem, the series converges at every $x \in \R$ to the average of the left-hand and right-hand limits:
+\[
+    Ff(x) = \frac{1}{2}\big(f(x-0) + f(x+0)\big) =
+    \begin{cases}
+        \frac{1}{2}(2\pi + 0) = \pi & \text{if } x = 0, \\
+        f(x) = x & \text{if } x \in (0, 2\pi), \\
+        \frac{1}{2}(2\pi + 0) = \pi & \text{if } x = 2\pi.
+    \end{cases}
+\]
+
+\subsection{Complex Notation for Fourier Series}
+
+\begin{definition}{Complex Fourier Series}{complex_fourier}
+    Let $f : \R \to \R$ be a piecewise continuous, $T$-periodic function. The \textbf{complex Fourier series} of $f$ is given by
+    \[
+        Ff(x) = \sum_{n=-\infty}^{\infty} c_n e^{i \frac{2\pi n}{T} x},
+    \]
+    where the \textbf{complex Fourier coefficients} $c_n \in \C$ are defined for all $n \in \Z$ by
+    \[
+        c_n = \frac{1}{T} \int_{0}^{T} f(x) e^{-i \frac{2\pi n}{T} x} \dx.
+    \]
+\end{definition}
+
+\begin{demonstration}[Derivation for $T = 2\pi$]
+    For simplicity, take $T = 2\pi$. The real trigonometric Fourier series is
+    \[
+        Ff(x) = \frac{a_0}{2} + \sum_{n=1}^{\infty} \big[ a_n \cos(nx) + b_n \sin(nx) \big].
+    \]
+    Recall Euler's identity $e^{i\theta} = \cos\theta + i\sin\theta$, which implies
+    \[
+        \cos(nx) = \frac{e^{inx} + e^{-inx}}{2} \quad \text{and} \quad \sin(nx) = \frac{e^{inx} - e^{-inx}}{2i}.
+    \]
+    Substituting these expressions into the series gives
+    \begin{align*}
+        Ff(x) &= \frac{a_0}{2} + \sum_{n=1}^{\infty} \left[ \frac{a_n}{2} \left(e^{inx} + e^{-inx}\right) + \frac{b_n}{2i} \left(e^{inx} - e^{-inx}\right) \right] \\
+              &= \frac{a_0}{2} + \sum_{n=1}^{\infty} \left[ e^{inx} \left(\frac{a_n - ib_n}{2}\right) + e^{-inx} \left(\frac{a_n + ib_n}{2}\right) \right] \\
+              &= \sum_{n=-\infty}^{\infty} c_n e^{inx},
+    \end{align*}
+    where we identify the coefficients as follows:
+    \begin{itemize}
+        \item For $n = 0$:
+        \[
+            c_0 = \frac{a_0}{2} = \frac{1}{2} \cdot \frac{1}{\pi} \int_{0}^{2\pi} f(x) \dx = \frac{1}{2\pi} \int_{0}^{2\pi} f(x) \dx.
+        \]
+        \item For $n \ge 1$:
+        \begin{align*}
+            c_n &= \frac{a_n - i b_n}{2} = \frac{1}{2\pi} \int_{0}^{2\pi} f(x) \cos(nx) \dx - \frac{i}{2\pi} \int_{0}^{2\pi} f(x) \sin(nx) \dx \\
+                &= \frac{1}{2\pi} \int_{0}^{2\pi} f(x) \big(\cos(nx) - i\sin(nx)\big) \dx \\
+                &= \frac{1}{2\pi} \int_{0}^{2\pi} f(x) \big(\cos(-nx) + i\sin(-nx)\big) \dx = \frac{1}{2\pi} \int_{0}^{2\pi} f(x) e^{-inx} \dx.
+        \end{align*}
+        \item Similarly, for $-n$ with $n \ge 1$:
+        \[
+            c_{-n} = \frac{a_n + i b_n}{2} = \frac{1}{2\pi} \int_{0}^{2\pi} f(x) \big(\cos(nx) + i\sin(nx)\big) \dx = \frac{1}{2\pi} \int_{0}^{2\pi} f(x) e^{inx} \dx.
+        \]
+    \end{itemize}
+    Combining all three cases yields $c_n = \frac{1}{2\pi} \int_{0}^{2\pi} f(x) e^{-inx} \dx$ for every $n \in \Z$.
+\end{demonstration}
+
+\begin{remarque}[Conversion Formulas]
+    In summary, for any $T$-periodic piecewise continuous function $f$:
+    \begin{enumerate}
+        \item $c_n = \dfrac{1}{T} \displaystyle\int_{0}^{T} f(x) e^{-i \frac{2\pi n}{T} x} \dx$ for all $n \in \Z$.
+        \item For $n \ge 1$, the complex and real coefficients are related by:
+        \[
+            c_0 = \frac{a_0}{2}, \qquad c_n = \frac{a_n - i b_n}{2}, \qquad c_{-n} = \frac{a_n + i b_n}{2}.
+        \]
+    \end{enumerate}
+    \textbf{Homework:} Express $a_n$ and $b_n$ directly in terms of $c_n$ and $c_{-n}$ (namely, $a_0 = 2c_0$, $a_n = c_n + c_{-n}$, and $b_n = i(c_n - c_{-n})$ for $n \ge 1$).
+\end{remarque}
+
+\section{Properties of Fourier Series}
+
+\subsection{Periodicity and Parity}
+
+\begin{theoreme}{Periodicity and Parity of Fourier Series}{periodicity_parity}
+    Let $f : \R \to \R$ be a $T$-periodic function that is piecewise continuous. Then:
+    \begin{enumerate}
+        \item[(a)] Its Fourier series $Ff(x)$ is also $T$-periodic.
+        \item[(b)] If $f$ is an \textbf{even} function (i.e., $f(-x) = f(x)$ for all $x \in \R$), then $b_n = 0$ for all $n \ge 1$, and its Fourier series reduces to a pure cosine series:
+        \[
+            Ff(x) = \frac{a_0}{2} + \sum_{n=1}^{\infty} a_n \cos\left(\frac{2\pi n}{T} x\right).
+        \]
+        \item[(c)] If $f$ is an \textbf{odd} function (i.e., $f(-x) = -f(x)$ for all $x \in \R$), then $a_n = 0$ for all $n \ge 0$, and its Fourier series reduces to a pure sine series:
+        \[
+            Ff(x) = \sum_{n=1}^{\infty} b_n \sin\left(\frac{2\pi n}{T} x\right).
+        \]
+    \end{enumerate}
+\end{theoreme}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}[scale=0.85, >=Stealth]
+        % --- Top Plot: Even Function ---
+        \begin{scope}[yshift=0cm]
+            \draw[->, paletteDark, thick] (-6.5, 0) -- (6.5, 0) node[right] {$x$};
+            \draw[->, exForest, very thick] (0, -1.6) -- (0, 1.9) node[above] {$y$};
+            
+            % Even wave f(x) = cos(x) + 0.35*cos(3x)
+            \draw[paletteDark, very thick, smooth, samples=200, domain=-6.1:6.1] 
+                plot (\x, {1.1*cos(\x r) + 0.35*cos(3*\x r)});
+            
+            % Symmetry points -x and x
+            \pgfmathsetmacro{\xval}{1.25}
+            \pgfmathsetmacro{\yval}{1.1*cos(\xval r) + 0.35*cos(3*\xval r)}
+            \draw[dashed, thmGold, thick] (-\xval, 0) node[below, black] {$-x$} -- (-\xval, \yval) -- (\xval, \yval) -- (\xval, 0) node[below, black] {$x$};
+            \fill[thmGold] (-\xval, \yval) circle (2.5pt) node[above left, black] {$f(-x)=f(x)$};
+            \fill[thmGold] (\xval, \yval) circle (2.5pt) node[above right, black] {$f(x)$};
+            \node[anchor=west, defCyan!85!black, font=\sffamily\bfseries\small] at (-6.4, 1.6) {Even function: $f(-x) = f(x)$};
+        \end{scope}
+
+        % --- Bottom Plot: Odd Function ---
+        \begin{scope}[yshift=-4.2cm]
+            \draw[->, paletteDark, thick] (-6.5, 0) -- (6.5, 0) node[right] {$x$};
+            \draw[->, paletteDark, thick] (0, -1.8) -- (0, 1.8) node[above] {$y$};
+            
+            % Odd wave f(x) = sin(x) + 0.3*sin(2x)
+            \draw[paletteDark, very thick, smooth, samples=200, domain=-6.1:6.1] 
+                plot (\x, {1.15*sin(\x r) + 0.3*sin(2*\x r)});
+            
+            % Origin symmetry dot
+            \fill[exForest] (0, 0) circle (3.5pt);
+            
+            % Symmetry points -x and x
+            \pgfmathsetmacro{\xval}{1.35}
+            \pgfmathsetmacro{\yval}{1.15*sin(\xval r) + 0.3*sin(2*\xval r)}
+            \draw[dashed, thmGold, thick] (-\xval, 0) node[above, black] {$-x$} -- (-\xval, -\yval);
+            \draw[dashed, thmGold, thick] (\xval, 0) node[below, black] {$x$} -- (\xval, \yval);
+            \draw[dashed, thmGold, thick] (-\xval, -\yval) -- (\xval, \yval);
+            \fill[thmGold] (-\xval, -\yval) circle (2.5pt) node[left, black] {$f(-x) = -f(x)$};
+            \fill[thmGold] (\xval, \yval) circle (2.5pt) node[right, black] {$f(x)$};
+            \node[anchor=west, defCyan!85!black, font=\sffamily\bfseries\small] at (-6.4, 1.5) {Odd function: $f(-x) = -f(x)$};
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Geometric symmetry of $T$-periodic even functions (symmetric about the vertical axis) and odd functions (symmetric about the origin).}
+\end{figure}
+
+\begin{remarque}
+    Canonical examples are $f(x) = \cos(x)$ (even, $2\pi$-periodic) and $f(x) = \sin(x)$ (odd, $2\pi$-periodic).
+\end{remarque}
+
+\begin{demonstration}
+    For simplicity, assume $T = 2\pi$.
+    \begin{enumerate}
+        \item[(a)] Let $N \in \N^*$. The $N$-th partial Fourier sum is
+        \[
+            F_N f(x) = \frac{a_0}{2} + \sum_{n=1}^{N} \big[ a_n \cos(nx) + b_n \sin(nx) \big].
+        \]
+        Evaluating at $x + 2\pi$ and using the $2\pi$-periodicity of $\cos$ and $\sin$:
+        \begin{align*}
+            F_N f(x + 2\pi) &= \frac{a_0}{2} + \sum_{n=1}^{N} \big[ a_n \cos(n(x + 2\pi)) + b_n \sin(n(x + 2\pi)) \big] \\
+                            &= \frac{a_0}{2} + \sum_{n=1}^{N} \big[ a_n \cos(nx) + b_n \sin(nx) \big] = F_N f(x).
+        \end{align*}
+        Taking the limit as $N \to \infty$ (wherever the series converges), we conclude that
+        \[
+            Ff(x + 2\pi) = \lim_{N \to \infty} F_N f(x + 2\pi) = \lim_{N \to \infty} F_N f(x) = Ff(x).
+        \]
+
+        \item[(b)] Suppose $f(-x) = f(x)$ for all $x \in \R$. Recall that if $g$ is $T$-periodic, then $\int_{0}^{T} g(x) \dx = \int_{a}^{a+T} g(x) \dx$ for any $a \in \R$. Choosing $a = -\pi$ with $T = 2\pi$, we write
+        \begin{align*}
+            b_n &= \frac{1}{\pi} \int_{0}^{2\pi} f(x) \sin(nx) \dx = \frac{1}{\pi} \int_{-\pi}^{\pi} f(x) \sin(nx) \dx \\
+                &= \frac{1}{\pi} \int_{-\pi}^{0} f(x) \sin(nx) \dx + \frac{1}{\pi} \int_{0}^{\pi} f(x) \sin(nx) \dx.
+        \end{align*}
+        In the first integral, perform the substitution $y = -x$ ($\dd y = -\dx$):
+        \begin{align*}
+            \frac{1}{\pi} \int_{-\pi}^{0} f(x) \sin(nx) \dx &= -\frac{1}{\pi} \int_{\pi}^{0} f(-y) \sin(-ny) \dy \\
+            &= -\frac{1}{\pi} \int_{\pi}^{0} f(y) \big(-\sin(ny)\big) \dy = -\frac{1}{\pi} \int_{0}^{\pi} f(y) \sin(ny) \dy.
+        \end{align*}
+        Adding the two integrals cancels them identically, giving $b_n = 0$ for all $n \ge 1$.
+
+        \item[(c)] Suppose $f(-x) = -f(x)$ for all $x \in \R$. By the exact same interval shift to $[-\pi, \pi]$ and substitution $y = -x$, the product $f(x)\cos(nx)$ is odd, so $a_n = \frac{1}{\pi} \int_{-\pi}^{\pi} f(x)\cos(nx) \dx = 0$ for all $n \ge 0$.
+    \end{enumerate}
+\end{demonstration}
+
+\subsection{Parseval's Identity}
+
+\begin{theoreme}{Parseval's Identity}{parseval}
+    Let $f : \R \to \R$ be a $T$-periodic function that is piecewise continuous. Then
+    \[
+        \frac{2}{T} \int_{0}^{T} \big(f(x)\big)^2 \dx = \frac{a_0^2}{2} + \sum_{n=1}^{\infty} \left(a_n^2 + b_n^2\right),
+    \]
+    where $\{a_n\}_{n \ge 0}$ and $\{b_n\}_{n \ge 1}$ are the real Fourier coefficients of $f$.
+\end{theoreme}
+
+\begin{remarque}[Complex Form of Parseval's Identity]
+    In terms of the complex Fourier coefficients $\{c_n\}_{n \in \Z}$, Parseval's identity takes the compact form
+    \[
+        \frac{1}{T} \int_{0}^{T} \abs{f(x)}^2 \dx = \sum_{n=-\infty}^{\infty} \abs{c_n}^2.
+    \]
+\end{remarque}
+
+\begin{exemple}[Basel Problem and Leibniz Formula]
+    Let $f : \R \to \R$ be the $2\pi$-periodic sawtooth function given by $f(x) = x$ for $x \in [0, 2\pi)$. We previously established that
+    \[
+        Ff(x) = \pi - \sum_{n=1}^{\infty} \frac{2}{n} \sin(nx),
+    \]
+    so $a_0 = 2\pi$, $a_n = 0$, and $b_n = -\frac{2}{n}$ for $n \ge 1$. Applying Parseval's identity with $T = 2\pi$:
+    \begin{align*}
+        \frac{1}{\pi} \int_{0}^{2\pi} \big(f(x)\big)^2 \dx &= \frac{a_0^2}{2} + \sum_{n=1}^{\infty} \left(a_n^2 + b_n^2\right) \\
+        &= \frac{(2\pi)^2}{2} + \sum_{n=1}^{\infty} \left[ 0^2 + \left(-\frac{2}{n}\right)^2 \right] = 2\pi^2 + 4 \sum_{n=1}^{\infty} \frac{1}{n^2}.
+    \end{align*}
+    On the other hand, evaluating the left-hand integral directly yields
+    \[
+        \frac{1}{\pi} \int_{0}^{2\pi} x^2 \dx = \frac{1}{\pi} \left[ \frac{x^3}{3} \right]_{0}^{2\pi} = \frac{8\pi^2}{3}.
+    \]
+    Equating the two expressions, we obtain Euler's solution to the Basel problem:
+    \[
+        \frac{8\pi^2}{3} = 2\pi^2 + 4 \sum_{n=1}^{\infty} \frac{1}{n^2} \implies \frac{2\pi^2}{3} = 4 \sum_{n=1}^{\infty} \frac{1}{n^2} \implies \sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}.
+    \]
+    \textbf{Note:} We can also use Dirichlet's theorem directly to evaluate alternating series. Plugging $x = \frac{\pi}{2} \in (0, 2\pi)$ into $Ff(x) = f(x)$ gives
+    \[
+        \frac{\pi}{2} = f\left(\frac{\pi}{2}\right) = Ff\left(\frac{\pi}{2}\right) = \pi - 2 \sum_{n=1}^{\infty} \frac{\sin\left(\frac{n\pi}{2}\right)}{n}.
+    \]
+    Since $\sin\left(\frac{n\pi}{2}\right) = 0$ for even $n$ and $\sin\left(\frac{(2k+1)\pi}{2}\right) = (-1)^k$ for odd $n = 2k+1$ ($k \ge 0$), this simplifies to
+    \[
+        \frac{\pi}{2} = \pi - 2 \sum_{k=0}^{\infty} \frac{(-1)^k}{2k+1} \implies \frac{\pi}{4} = \sum_{k=0}^{\infty} \frac{(-1)^k}{2k+1} = 1 - \frac{1}{3} + \frac{1}{5} - \frac{1}{7} + \frac{1}{9} - \cdots.
+    \]
+\end{exemple}
+
+\begin{demonstration}[Proof of Parseval's Identity (Special Case)]
+    For simplicity, assume $T = 2\pi$ and that $f \in C^1(\R)$ (hence $f$ is continuous and piecewise $C^1$). By Dirichlet's theorem, $Ff(x) = f(x)$ for all $x \in \R$ (with uniform convergence, allowing term-by-term integration):
+    \begin{align*}
+        \frac{1}{\pi} \int_{0}^{2\pi} \big(f(x)\big)^2 \dx &= \frac{1}{\pi} \int_{0}^{2\pi} f(x) \, Ff(x) \dx \\
+        &= \frac{1}{\pi} \int_{0}^{2\pi} f(x) \left( \frac{a_0}{2} + \sum_{n=1}^{\infty} \big[ a_n \cos(nx) + b_n \sin(nx) \big] \right) \dx \\
+        &= \frac{a_0}{2} \underbrace{\frac{1}{\pi} \int_{0}^{2\pi} f(x) \dx}_{a_0} + \sum_{n=1}^{\infty} a_n \underbrace{\frac{1}{\pi} \int_{0}^{2\pi} f(x) \cos(nx) \dx}_{a_n} + \sum_{n=1}^{\infty} b_n \underbrace{\frac{1}{\pi} \int_{0}^{2\pi} f(x) \sin(nx) \dx}_{b_n} \\
+        &= \frac{a_0^2}{2} + \sum_{n=1}^{\infty} a_n^2 + \sum_{n=1}^{\infty} b_n^2. \qedhere
+    \end{align*}
+\end{demonstration}
+
+\subsection{Differentiation and Integration of Fourier Series}
+
+\begin{theoreme}{Term-by-Term Differentiation of Fourier Series}{diff_fourier}
+    Let $f : \R \to \R$ be a $T$-periodic, \textbf{continuous} function that is piecewise $C^2$. Then the Fourier series of $f$,
+    \[
+        Ff(x) = \frac{a_0}{2} + \sum_{n=1}^{\infty} \left[ a_n \cos\left(\frac{2\pi n}{T} x\right) + b_n \sin\left(\frac{2\pi n}{T} x\right) \right],
+    \]
+    can be differentiated term by term, and for every $x \in \R$ the resulting series converges to the average of the one-sided derivatives of $f$:
+    \[
+        (Ff)'(x) = \sum_{n=1}^{\infty} \frac{2\pi n}{T} \left[ -a_n \sin\left(\frac{2\pi n}{T} x\right) + b_n \cos\left(\frac{2\pi n}{T} x\right) \right] = \frac{f'(x-0) + f'(x+0)}{2},
+    \]
+    where $\dfrac{f'(x-0) + f'(x+0)}{2} = \lim\limits_{t \to 0^+} \dfrac{f'(x-t) + f'(x+t)}{2}$.
+\end{theoreme}
+
+\begin{remarque}
+    Since $f$ is continuous and piecewise $C^2$ (hence piecewise $C^1$), we have $Ff(x) = f(x)$ for all $x \in \R$. However, $f(x)$ may fail to be differentiable at a finite number of corner points in any compact interval $[a, b]$. Away from those non-differentiable points, $f$ is $C^2$ and $(Ff)'(x) = f'(x)$. At the corner points, the content of Theorem~\ref{thm:diff_fourier} is that the term-by-term differentiated series still converges to the arithmetic mean of the left-hand and right-hand derivatives.
+\end{remarque}
+
+\begin{exemple}[Triangular Wave vs. Square Wave]
+    \begin{enumerate}
+        \item[(a)] \textbf{Continuous Triangular Wave:} Let $f : \R \to \R$ be the $2\pi$-periodic function defined on $[0, 2\pi)$ by
+        \[
+            f(x) =
+            \begin{cases}
+                x & \text{if } x \in [0, \pi), \\
+                2\pi - x & \text{if } x \in [\pi, 2\pi).
+            \end{cases}
+        \]
+        Notice that $f$ is continuous on all of $\R$. Its first derivative $f'(x)$ is not defined at $x = n\pi$ ($n \in \Z$), is continuous away from these points ($f'(x) = 1$ on $(2k\pi, (2k+1)\pi)$ and $f'(x) = -1$ on $((2k+1)\pi, (2k+2)\pi)$), and possesses finite one-sided limits $\lim_{t \to n\pi^-} f'(t)$ and $\lim_{t \to n\pi^+} f'(t)$. Similarly, $f''(x) = 0$ for all $x \neq n\pi$, with finite one-sided limits $f''(n\pi - 0) = f''(n\pi + 0) = 0$. Hence $f$ is continuous and piecewise $C^2$.
+
+        \begin{center}
+        \begin{tikzpicture}[scale=0.68, >=Stealth]
+            % --- Plot 1: f(x) Triangular Wave ---
+            \begin{scope}[yshift=0cm]
+                \draw[->, paletteDark, thick] (-6.8, 0) -- (6.8, 0) node[right] {$x$};
+                \draw[->, paletteDark, thick] (0, -0.4) -- (0, 2.2) node[above] {$f(x)$};
+                \draw[defCyan!85!black, very thick] (-6.28, 0) -- (-3.14, 1.57) -- (0, 0) -- (3.14, 1.57) -- (6.28, 0);
+                \foreach \x/\lbl in {-6.28/{-2\pi}, -3.14/{-\pi}, 3.14/{\pi}, 6.28/{2\pi}} {
+                    \draw (\x, 0.08) -- (\x, -0.08) node[below, font=\footnotesize] {$\lbl$};
+                }
+                \node[below left, font=\footnotesize] at (0,0) {$0$};
+                \node[left, font=\footnotesize] at (0, 1.57) {$\pi$};
+            \end{scope}
+
+            % --- Plot 2: f'(x) Square Wave with Open Circles ---
+            \begin{scope}[yshift=-3.4cm]
+                \draw[->, paletteDark, thick] (-6.8, 0) -- (6.8, 0) node[right] {$x$};
+                \draw[->, paletteDark, thick] (0, -1.4) -- (0, 1.5) node[above] {$f'(x)$};
+                
+                % Segments of +1 and -1
+                \draw[thmGold!90!black, very thick] (-6.28, 1) -- (-3.14, 1);
+                \draw[thmGold!90!black, very thick] (-3.14, -1) -- (0, -1);
+                \draw[thmGold!90!black, very thick] (0, 1) -- (3.14, 1);
+                \draw[thmGold!90!black, very thick] (3.14, -1) -- (6.28, -1);
+
+                % Open circles at jump discontinuities
+                \foreach \x in {-6.28, -3.14, 0, 3.14, 6.28} {
+                    \fill[white] (\x, 1) circle (2.5pt);
+                    \draw[thmGold!90!black, thick] (\x, 1) circle (2.5pt);
+                    \fill[white] (\x, -1) circle (2.5pt);
+                    \draw[thmGold!90!black, thick] (\x, -1) circle (2.5pt);
+                }
+                \node[below right, font=\footnotesize] at (3.14, 0) {$\pi$};
+                \node[below right, font=\footnotesize] at (6.28, 0) {$2\pi$};
+                \node[above left, font=\footnotesize] at (0, 1) {$1$};
+                \node[below left, font=\footnotesize] at (0, -1) {$-1$};
+            \end{scope}
+
+            % --- Plot 3: f''(x) Zero with Open Circles ---
+            \begin{scope}[yshift=-6.4cm]
+                \draw[->, paletteDark, thick] (-6.8, 0) -- (6.8, 0) node[right] {$x$};
+                \draw[->, paletteDark, thick] (0, -0.8) -- (0, 1.1) node[above] {$f''(x)$};
+                \draw[exForest, very thick] (-6.28, 0) -- (6.28, 0);
+                \foreach \x/\lbl in {-6.28/{-2\pi}, -3.14/{-\pi}, 0/{0}, 3.14/{\pi}, 6.28/{2\pi}} {
+                    \fill[white] (\x, 0) circle (2.5pt);
+                    \draw[exForest, thick] (\x, 0) circle (2.5pt);
+                    \node[below, font=\footnotesize] at (\x, -0.12) {$\lbl$};
+                }
+            \end{scope}
+        \end{tikzpicture}
+        \end{center}
+
+        The Fourier series of $f$ is
+        \[
+            f(x) = Ff(x) = \frac{\pi}{2} - \frac{4}{\pi} \sum_{k=0}^{\infty} \frac{\cos\big((2k+1)x\big)}{(2k+1)^2}.
+        \]
+        Differentiating term by term according to Theorem~\ref{thm:diff_fourier} yields
+        \[
+            (Ff)'(x) = \frac{4}{\pi} \sum_{k=0}^{\infty} \frac{\sin\big((2k+1)x\big)}{2k+1} = \lim_{t \to 0^+} \frac{f'(x-t) + f'(x+t)}{2}.
+        \]
+        Even though $f'(x)$ is not defined at $x = n\pi$ ($n \in \Z$), the differentiated series converges everywhere, and at $x = n\pi$ it converges to $\frac{1}{2}\big(f'(n\pi - 0) + f'(n\pi + 0)\big) = \frac{1}{2}(-1 + 1) = 0$.
+
+        \item[(b)] \textbf{Failure of Continuity ($f \notin C^0(\R)$):} Let $f : \R \to \R$ be the $2\pi$-periodic step function given by
+        \[
+            f(x) =
+            \begin{cases}
+                1 & \text{if } x \in [0, \pi), \\
+                0 & \text{if } x \in [\pi, 2\pi).
+            \end{cases}
+        \]
+        Here $f \notin C^0(\R)$, so the hypothesis of Theorem~\ref{thm:diff_fourier} is violated. Its Fourier series is
+        \[
+            Ff(x) = \frac{1}{2} + \frac{2}{\pi} \sum_{k=0}^{\infty} \frac{\sin\big((2k+1)x\big)}{2k+1}.
+        \]
+        Formal term-by-term differentiation produces
+        \[
+            (Ff)'(x) = \frac{2}{\pi} \sum_{k=0}^{\infty} \cos\big((2k+1)x\big).
+        \]
+        At $x = \frac{\pi}{2}$, every term vanishes: $(Ff)'\left(\frac{\pi}{2}\right) = \frac{2}{\pi} \sum_{k=0}^{\infty} \cos\left((2k+1)\frac{\pi}{2}\right) = 0$. However, at $x = \pi$,
+        \[
+            (Ff)'(\pi) = \frac{2}{\pi} \sum_{k=0}^{\infty} \cos\big((2k+1)\pi\big) = \frac{2}{\pi} \sum_{k=0}^{\infty} (-1),
+        \]
+        which diverges!
+    \end{enumerate}
+\end{exemple}
+
+\begin{theoreme}{Term-by-Term Integration of Fourier Series}{int_fourier}
+    Let $f : \R \to \R$ be a $T$-periodic function that is piecewise continuous. Then for any $c, d \in \R$, the Fourier series of $f$ can be integrated term by term:
+    \[
+        \int_{c}^{d} f(x) \dx = \int_{c}^{d} Ff(x) \dx = \int_{c}^{d} \frac{a_0}{2} \dx + \sum_{n=1}^{\infty} \int_{c}^{d} \left[ a_n \cos\left(\frac{2\pi n}{T} x\right) + b_n \sin\left(\frac{2\pi n}{T} x\right) \right] \dx.
+    \]
+\end{theoreme}
+
+\section{Other Types of Fourier Series}
+
+\subsection{Fourier Cosine Series}
+
+\begin{theoreme}{Fourier Cosine Series (Even Extension)}{fourier_cosine}
+    Let $f : [0, L] \to \R$ be a \textbf{continuous} function that is piecewise $C^1$. Then the series
+    \[
+        F_c f(x) = \frac{a_0}{2} + \sum_{n=1}^{\infty} a_n \cos\left(\frac{\pi n}{L} x\right),
+    \]
+    where
+    \[
+        a_n = \frac{2}{L} \int_{0}^{L} f(x) \cos\left(\frac{\pi n}{L} x\right) \dx \qquad \text{for } n \ge 0,
+    \]
+    is called the \textbf{Fourier cosine series} of $f$, and satisfies
+    \[
+        F_c f(x) = f(x) \qquad \forall x \in [0, L].
+    \]
+\end{theoreme}

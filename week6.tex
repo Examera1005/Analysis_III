@@ -1,0 +1,306 @@
+% ==============================================================================
+% CHAPTER: WEEK 6 - SURFACE INTEGRALS & DIVERGENCE THEOREM
+% ==============================================================================
+
+\chapter{Week 6: Surface Integrals and the Divergence Theorem}
+
+% ==============================================================================
+\section{Surface Integrals}
+% ==============================================================================
+
+\subsection{Surface Integral of a Scalar Field}
+
+\subsubsection{Definition and Properties}
+
+\begin{definition}{Surface Integral of a Scalar Field}{scalar_surface_integral}
+Let $\Sigma \subset \R^3$ be a regular surface parametrized by
+\[
+    \sigma : \overline{A} \subset \R^2 \to \Sigma, \qquad (u,v) \mapsto \sigma(u,v),
+\]
+where $A \subset \R^2$ is a bounded open domain, and let $f : \Sigma \to \R$, $x \mapsto f(x)$, be a scalar field such that $f \in C^0(\Sigma)$. The \textbf{surface integral of $f$ over $\Sigma$} is defined by
+\[
+    \iint_{\Sigma} f \dS = \iint_{A} f\big(\sigma(u,v)\big) \norm{\sigma_u \times \sigma_v} \,\dd u\,\dd v,
+\]
+where $\sigma_u = \pdv{\sigma}{u}$ and $\sigma_v = \pdv{\sigma}{v}$ denote the partial derivatives of the parametrization $\sigma$.
+\end{definition}
+
+\begin{remarque}[Analogy with Line Integrals and Surface Area]
+\begin{enumerate}[label=\textbf{\alph*)}]
+    \item \textbf{Analogy with the line integral of a scalar field along a curve:}
+    \begin{center}
+    \renewcommand{\arraystretch}{1.35}
+    \begin{tabular}{@{}ll@{}}
+        \toprule
+        \textbf{Curve $\Gamma \subset \R^2$ or $\R^3$} & \textbf{Surface $\Sigma \subset \R^3$} \\
+        \midrule
+        Parametrization: $\gamma : [a,b] \to \Gamma$, $t \mapsto \gamma(t)$ & Parametrization: $\sigma : \overline{A} \to \Sigma$, $(u,v) \mapsto \sigma(u,v)$ \\
+        Scalar field: $g : \Gamma \to \R$ & Scalar field: $f : \Sigma \to \R$ \\
+        Line element: $\dd l = \norm{\gamma'(t)} \dt$ & Surface element: $\dS = \norm{\sigma_u \times \sigma_v} \,\dd u\,\dd v$ \\
+        $\displaystyle \int_{\Gamma} g \,\dd l = \int_{a}^{b} g\big(\gamma(t)\big) \norm{\gamma'(t)} \dt$ & $\displaystyle \iint_{\Sigma} f \dS = \iint_{A} f\big(\sigma(u,v)\big) \norm{\sigma_u \times \sigma_v} \,\dd u\,\dd v$ \\
+        $\displaystyle \operatorname{Length}(\Gamma) = \int_{\Gamma} 1 \,\dd l = \int_{a}^{b} \norm{\gamma'(t)} \dt$ & $\displaystyle \operatorname{Area}(\Sigma) = \iint_{\Sigma} 1 \dS = \iint_{A} \norm{\sigma_u \times \sigma_v} \,\dd u\,\dd v$ \\
+        \bottomrule
+    \end{tabular}
+    \end{center}
+    \item \textbf{Area of a surface $\Sigma$:} Choosing the constant scalar field $f \equiv 1$ yields the surface area of $\Sigma$:
+    \[
+        \operatorname{Area}(\Sigma) = \iint_{\Sigma} 1 \dS = \iint_{A} \norm{\sigma_u \times \sigma_v} \,\dd u\,\dd v.
+    \]
+\end{enumerate}
+\end{remarque}
+
+\subsubsection{Worked Examples}
+
+\begin{exemple}[Surface Area of a Sphere of Radius $R$]
+What is the area of the sphere $\Sigma = \left\{(x,y,z) \in \R^3 : x^2 + y^2 + z^2 = R^2\right\}$ ($R > 0$)?
+
+\smallskip
+\noindent\textbf{Parametrization:} Using spherical coordinates with fixed radius $R$, let $A = (0, 2\pi) \times (0, \pi)$ and define $\sigma : \overline{A} \to \Sigma$ by $\sigma(\theta, \varphi) = (R \sin\varphi \cos\theta, \, R \sin\varphi \sin\theta, \, R \cos\varphi)$. The tangent vectors and their cross product are:
+\[
+    \sigma_\theta = \begin{pmatrix} -R \sin\varphi \sin\theta \\ R \sin\varphi \cos\theta \\ 0 \end{pmatrix}, \quad
+    \sigma_\varphi = \begin{pmatrix} R \cos\varphi \cos\theta \\ R \cos\varphi \sin\theta \\ -R \sin\varphi \end{pmatrix}
+    \implies
+    \sigma_\theta \times \sigma_\varphi = \begin{pmatrix} -R^2 \sin^2\varphi \cos\theta \\ -R^2 \sin^2\varphi \sin\theta \\ -R^2 \sin\varphi \cos\varphi \end{pmatrix} = -R \sin\varphi \, \sigma(\theta, \varphi).
+\]
+Since $\norm{\sigma(\theta, \varphi)} = R$ and $\sin\varphi \ge 0$ on $(0, \pi)$, we have $\norm{\sigma_\theta \times \sigma_\varphi} = R \sin\varphi \norm{\sigma(\theta, \varphi)} = R^2 \sin\varphi$. Setting $f = 1$, the area of $\Sigma$ is:
+\[
+    \operatorname{Area}(\Sigma) = \iint_{\Sigma} 1 \dS = \iint_{A} \norm{\sigma_\theta \times \sigma_\varphi} \dphi \dtheta = \int_{0}^{2\pi} \left( \int_{0}^{\pi} R^2 \sin\varphi \dphi \right) \dtheta = 2\pi R^2 \big[ -\cos\varphi \big]_{0}^{\pi} = \boxed{4\pi R^2}.
+\]
+\end{exemple}
+
+\begin{exemple}[Scalar Integral over a Cylinder]
+Let $\Sigma = \left\{(x,y,z) \in \R^3 : x^2 + y^2 = 1 \text{ and } 0 \le z \le 1\right\}$ be the lateral surface of the unit cylinder, and consider the scalar field $f : \Sigma \to \R$, $f(x,y,z) = x^2 + y^2 + 2z$.
+
+\smallskip
+\noindent\textbf{Parametrization:} Let $A = (0, 2\pi) \times (0, 1)$ and $\sigma(\theta, z) = (\cos\theta, \sin\theta, z)$. The partial derivatives and cross product are:
+\[
+    \sigma_\theta = (-\sin\theta, \cos\theta, 0), \quad \sigma_z = (0, 0, 1) \implies \sigma_\theta \times \sigma_z = (\cos\theta, \sin\theta, 0) \implies \norm{\sigma_\theta \times \sigma_z} = 1.
+\]
+Evaluating $f\big(\sigma(\theta, z)\big) = \cos^2\theta + \sin^2\theta + 2z = 1 + 2z$, we obtain:
+\[
+    \iint_{\Sigma} f \dS = \iint_{A} f\big(\sigma(\theta, z)\big) \norm{\sigma_\theta \times \sigma_z} \dtheta \dz = \int_{0}^{1} \int_{0}^{2\pi} (1 + 2z) \dtheta \dz = 2\pi \left[ z + z^2 \right]_{0}^{1} = \boxed{4\pi}.
+\]
+\end{exemple}
+
+% ------------------------------------------------------------------------------
+\subsection{Surface Integral of a Vector Field (Flux)}
+
+\subsubsection{Definition and Properties}
+
+\begin{definition}{Surface Integral (Flux) of a Vector Field}{vector_surface_integral}
+Let $\Sigma \subset \R^3$ be an orientable regular surface parametrized by
+\[
+    \sigma : \overline{A} \subset \R^2 \to \Sigma, \qquad (u,v) \mapsto \sigma(u,v),
+\]
+and let $F : \Sigma \to \R^3$, $x \mapsto F(x)$, be a continuous vector field such that $F \in C^0(\Sigma, \R^3)$. The \textbf{surface integral (or flux) of $F$ over $\Sigma$} in the direction of the normal vector $\sigma_u \times \sigma_v$ is defined by
+\[
+    \iint_{\Sigma} F \cdot \dd\vec{S} = \iint_{A} F\big(\sigma(u,v)\big) \cdot (\sigma_u \times \sigma_v) \,\dd u\,\dd v.
+\]
+Introducing the unit normal vector field $\nu(u,v) = \dfrac{\sigma_u \times \sigma_v}{\norm{\sigma_u \times \sigma_v}}$, this integral can equivalently be written as a scalar surface integral of the normal component $F \cdot \nu$:
+\[
+    \iint_{\Sigma} F \cdot \dd\vec{S} = \iint_{\Sigma} (F \cdot \nu) \dS = \iint_{A} \Big[ F\big(\sigma(u,v)\big) \cdot \nu(u,v) \Big] \norm{\sigma_u \times \sigma_v} \,\dd u\,\dd v.
+\]
+\end{definition}
+
+\begin{remarque}[Geometric Interpretation and Piecewise Regular Surfaces]
+\begin{enumerate}[label=\textbf{\alph*)}]
+    \item \textbf{Analogy with the work (circulation) of a vector field along a curve:}
+    \begin{itemize}
+        \item For a curve $\Gamma$ parametrized by $\gamma : [a,b] \to \Gamma$ and a vector field $G : \Gamma \to \R^3$, the line integral $\displaystyle\int_{\Gamma} G \cdot \dd\vec{l} = \int_{a}^{b} G\big(\gamma(t)\big) \cdot \gamma'(t) \dt$ integrates the \emph{tangential} component of $G$ \textbf{along} $\Gamma$.
+        \item For a surface $\Sigma$ parametrized by $\sigma : \overline{A} \to \Sigma$ and a vector field $F : \Sigma \to \R^3$, the surface integral $\displaystyle\iint_{\Sigma} F \cdot \dd\vec{S} = \iint_{A} F\big(\sigma(u,v)\big) \cdot (\sigma_u \times \sigma_v) \,\dd u\,\dd v$ integrates the \emph{normal} component of $F$ \textbf{across} $\Sigma$.
+    \end{itemize}
+    \item \textbf{Piecewise regular surfaces:} If $\Sigma = \bigcup_{i=1}^{k} \Sigma_i$ is a piecewise regular orientable surface composed of $k$ regular surfaces $\Sigma_i$ sharing coherent orientations (overlapping only along their boundary curves), then by additivity:
+    \[
+        \iint_{\Sigma} F \cdot \dd\vec{S} = \sum_{i=1}^{k} \iint_{\Sigma_i} F \cdot \dd\vec{S}_i.
+    \]
+    \item \textbf{Physical interpretation:} The integral $\displaystyle\iint_{\Sigma} F \cdot \dd\vec{S}$ measures the \textbf{flux} of the vector field $F$ across the surface $\Sigma$ in the orientation specified by $\nu = \dfrac{\sigma_u \times \sigma_v}{\norm{\sigma_u \times \sigma_v}}$. Reversing the orientation replaces $\nu$ with $-\nu$ and changes the sign of the integral.
+\end{enumerate}
+\end{remarque}
+
+\subsubsection{Worked Example}
+
+\begin{exemple}[Flux Across a Conical Surface]
+Let $\Sigma = \left\{(x,y,z) \in \R^3 : x^2 + y^2 = z^2 \text{ and } 0 \le z \le 1\right\}$ be the upper nappe of a cone for $z \in [0,1]$, and let $F : \Sigma \to \R^3$ be the vector field $F(x,y,z) = (y, -x, z^2)$. Compute the flux $\displaystyle\iint_{\Sigma} F \cdot \dd\vec{S}$ along the \textbf{ascending direction} (where the $z$-component of the normal is positive).
+
+\smallskip
+\noindent\textbf{Parametrization:} Let $A = (0, 2\pi) \times (0, 1)$ and define $\sigma : \overline{A} \to \Sigma$ by $\sigma(\theta, z) = (z \cos\theta, z \sin\theta, z)$. Then:
+\[
+    \sigma_\theta = (-z \sin\theta, \, z \cos\theta, \, 0), \quad
+    \sigma_z = (\cos\theta, \, \sin\theta, \, 1)
+    \implies \sigma_\theta \times \sigma_z = (z \cos\theta, \, z \sin\theta, \, -z).
+\]
+Since $z \in (0, 1)$, the third component of $\sigma_\theta \times \sigma_z$ is $-z < 0$ (pointing downwards). To orient $\Sigma$ in the \textbf{ascending direction}, we use $-(\sigma_\theta \times \sigma_z)$. Evaluating $F\big(\sigma(\theta, z)\big) = (z \sin\theta, \, -z \cos\theta, \, z^2)$, the dot product is:
+\[
+    F\big(\sigma(\theta, z)\big) \cdot (\sigma_\theta \times \sigma_z) = z^2 \sin\theta \cos\theta - z^2 \cos\theta \sin\theta - z^3 = -z^3.
+\]
+Accounting for the minus sign from the ascending orientation, the flux is:
+\[
+    \iint_{\Sigma} F \cdot \dd\vec{S} = - \iint_{A} F\big(\sigma(\theta, z)\big) \cdot (\sigma_\theta \times \sigma_z) \dtheta \dz = - \int_{0}^{2\pi} \int_{0}^{1} (-z^3) \dz \dtheta = \int_{0}^{2\pi} \left[ \frac{z^4}{4} \right]_{0}^{1} \dtheta = \boxed{\frac{\pi}{2}}.
+\]
+\end{exemple}
+
+% ==============================================================================
+\section{The Divergence Theorem (Gauss--Ostrogradsky)}
+% ==============================================================================
+
+\subsection{Regular Domains in $\R^3$}
+
+\begin{definition}{Regular Domain in $\R^3$}{regular_domain}
+We say that $\Omega \subset \R^3$ is a \textbf{regular domain} if there exist bounded open domains $\Omega_0, \Omega_1, \dots, \Omega_m \subset \R^3$ such that:
+\begin{enumerate}
+    \item $\Omega = \Omega_0 \setminus \bigcup_{i=1}^{m} \overline{\Omega}_i$ (an outer domain $\Omega_0$ with $m$ internal cavities $\overline{\Omega}_i$ removed);
+    \item $\overline{\Omega}_i \subset \Omega_0$ for all $1 \le i \le m$;
+    \item $\overline{\Omega}_i \cap \overline{\Omega}_j = \varnothing$ for all $1 \le i \neq j \le m$;
+    \item $\partial\Omega_i = \Sigma_i$ for all $0 \le i \le m$, where each $\Sigma_i$ is a closed (piecewise) regular orientable surface.
+\end{enumerate}
+In particular, the boundary of $\Omega$ is given by $\partial\Omega = \bigcup_{i=0}^{m} \Sigma_i$, and its outer unit normal $\nu : \partial\Omega \to \R^3$ points \emph{outward} from $\Omega_0$ on $\Sigma_0$ and \emph{inward} into each cavity $\Omega_i$ on $\Sigma_i$ ($1 \le i \le m$), i.e., always away from $\Omega$.
+\end{definition}
+
+% ------------------------------------------------------------------------------
+\subsection{Statement of the Divergence Theorem}
+
+\begin{theoreme}{Divergence Theorem (Gauss--Ostrogradsky)}{divergence_theorem}
+Let $\Omega \subset \R^3$ be a regular domain with outer unit normal vector field $\nu : \partial\Omega \to \R^3$, and let $F : \overline{\Omega} \to \R^3$ be a continuously differentiable vector field, $F \in C^1(\overline{\Omega}, \R^3)$. Then
+\[
+    \iiint_{\Omega} \operatorname{div} F(x,y,z) \dx\dy\dz = \iint_{\partial\Omega} (F \cdot \nu) \dS.
+\]
+In component form, writing $F = (F^1, F^2, F^3)$ and $\nu = (\nu^1, \nu^2, \nu^3)$, this reads:
+\[
+    \iiint_{\Omega} \left( \pdv{F^1}{x} + \pdv{F^2}{y} + \pdv{F^3}{z} \right) \dx\dy\dz = \iint_{\partial\Omega} \left( F^1 \nu^1 + F^2 \nu^2 + F^3 \nu^3 \right) \dS.
+\]
+\end{theoreme}
+
+% ------------------------------------------------------------------------------
+\subsection{Verification Examples}
+
+\subsubsection{Example 1: Unit Ball}
+
+\begin{exemple}[Unit Ball -- Part 1: Volume Integral (LHS)]
+Verify the Divergence Theorem for the open unit ball $\Omega = \left\{(x,y,z) \in \R^3 : x^2 + y^2 + z^2 < 1\right\}$ and the vector field $F(x,y,z) = (xy, y, z)$.
+
+\smallskip
+\noindent\textbf{Volume Integral (Left-Hand Side):} First, we compute the divergence of $F$:
+\[
+    \operatorname{div} F(x,y,z) = \pdv{}{x}(xy) + \pdv{}{y}(y) + \pdv{}{z}(z) = y + 1 + 1 = y + 2.
+\]
+Passing to spherical coordinates $(r, \theta, \varphi) \in (0,1) \times (0,2\pi) \times (0,\pi)$ with $y = r \sin\varphi \sin\theta$ and $\dd V = r^2 \sin\varphi \dphi \dtheta \dr$:
+\begin{align*}
+    \iiint_{\Omega} \operatorname{div} F \dx\dy\dz &= \int_{0}^{1} \int_{0}^{2\pi} \int_{0}^{\pi} (r \sin\varphi \sin\theta + 2) \, r^2 \sin\varphi \dphi \dtheta \dr \\
+    &= \left( \int_{0}^{1} r^3 \dr \right) \underbrace{\left( \int_{0}^{2\pi} \sin\theta \dtheta \right)}_{=\,0} \left( \int_{0}^{\pi} \sin^2\varphi \dphi \right) + 2 \left( \int_{0}^{1} r^2 \dr \right) \left( \int_{0}^{2\pi} \dtheta \right) \left( \int_{0}^{\pi} \sin\varphi \dphi \right) \\
+    &= 0 + 2 \cdot \frac{1}{3} \cdot 2\pi \cdot \big[ -\cos\varphi \big]_{0}^{\pi} = \frac{4\pi}{3} \cdot 2 = \boxed{\frac{8\pi}{3}}.
+\end{align*}
+\end{exemple}
+
+\begin{exemple}[Unit Ball -- Part 2: Surface Integral (RHS)]
+\textbf{Surface Integral (Right-Hand Side):} The boundary is the unit sphere $\partial\Omega = \left\{(x,y,z) \in \R^3 : x^2 + y^2 + z^2 = 1\right\}$. To obtain the \textbf{outer} normal directly, we order the parameters as $(\varphi, \theta) \in A = (0, \pi) \times (0, 2\pi)$:
+\[
+    \sigma(\varphi, \theta) = (\sin\varphi \cos\theta, \, \sin\varphi \sin\theta, \, \cos\varphi) \implies \sigma_\varphi \times \sigma_\theta = \sin\varphi \, \sigma(\varphi, \theta) = (\sin^2\varphi \cos\theta, \, \sin^2\varphi \sin\theta, \, \sin\varphi \cos\varphi).
+\]
+Evaluating $F\big(\sigma(\varphi, \theta)\big) = (\sin^2\varphi \cos\theta \sin\theta, \, \sin\varphi \sin\theta, \, \cos\varphi)$, the flux across $\partial\Omega$ is:
+\begin{align*}
+    \iint_{\partial\Omega} (F \cdot \nu) \dS &= \iint_{A} F\big(\sigma(\varphi, \theta)\big) \cdot (\sigma_\varphi \times \sigma_\theta) \dtheta \dphi \\
+    &= \int_{0}^{\pi} \int_{0}^{2\pi} \left( \sin^4\varphi \cos^2\theta \sin\theta + \sin^3\varphi \sin^2\theta + \sin\varphi \cos^2\varphi \right) \dtheta \dphi \\
+    &= \underbrace{\left( \int_{0}^{2\pi} \cos^2\theta \sin\theta \dtheta \right)}_{=\,0} \left( \int_{0}^{\pi} \sin^4\varphi \dphi \right) + \underbrace{\left( \int_{0}^{2\pi} \sin^2\theta \dtheta \right)}_{=\,\pi} \underbrace{\left( \int_{0}^{\pi} \sin^3\varphi \dphi \right)}_{=\,4/3} \\
+    &\quad + \underbrace{\left( \int_{0}^{2\pi} \dtheta \right)}_{=\,2\pi} \underbrace{\left( \int_{0}^{\pi} \sin\varphi \cos^2\varphi \dphi \right)}_{=\,2/3} = 0 + \pi \cdot \frac{4}{3} + 2\pi \cdot \frac{2}{3} = \boxed{\frac{8\pi}{3}}.
+\end{align*}
+\emph{Elementary integrals used:} $\displaystyle\int_{0}^{\pi} \sin^3\varphi \dphi = \left[ -\cos\varphi + \frac{\cos^3\varphi}{3} \right]_{0}^{\pi} = \frac{4}{3}$ and $\displaystyle\int_{0}^{\pi} \sin\varphi \cos^2\varphi \dphi = \left[ -\frac{\cos^3\varphi}{3} \right]_{0}^{\pi} = \frac{2}{3}$. Both sides match and equal $\dfrac{8\pi}{3}$.
+\end{exemple}
+
+\subsubsection{Example 2: Solid Cylinder}
+
+\begin{exemple}[Solid Cylinder -- Part 1: Volume Integral and Disks $\Sigma_0, \Sigma_1$]
+Verify the Divergence Theorem for the cylinder $\Omega = \left\{(x,y,z) \in \R^3 : x^2 + y^2 < 1 \text{ and } 0 < z < 1\right\}$ and the vector field $F(x,y,z) = (x^2, 0, 0)$.
+
+\smallskip
+\noindent\textbf{1. Volume Integral (Left-Hand Side):} We have $\operatorname{div} F(x,y,z) = \pdv{}{x}(x^2) = 2x$. By symmetry of $\Omega$ with respect to $x = 0$ and the oddness of $2x$ (or via cylindrical coordinates $\int_0^{2\pi} \cos\theta \dtheta = 0$):
+\[
+    \iiint_{\Omega} \operatorname{div} F(x,y,z) \dx\dy\dz = \iiint_{\Omega} 2x \dx\dy\dz = \boxed{0}.
+\]
+
+\noindent\textbf{2. Surface Integral (Right-Hand Side) -- Top and Bottom Disks:} The boundary is $\partial\Omega = \Sigma_0 \cup \Sigma_1 \cup \Sigma_2$.
+\begin{itemize}
+    \item \textbf{Bottom disk $\Sigma_0$ ($z = 0$):} Parametrized over $A^0 = (0, 2\pi) \times (0, 1)$ by $\sigma^0(\theta, r) = (r \cos\theta, r \sin\theta, 0)$. Then:
+    \[
+        \sigma^0_\theta \times \sigma^0_r = (-r \sin\theta, \, r \cos\theta, \, 0) \times (\cos\theta, \, \sin\theta, \, 0) = (0, \, 0, \, -r),
+    \]
+    which points \textbf{downwards} (outward from $\Omega$). Since $F\big(\sigma^0(\theta, r)\big) = (r^2 \cos^2\theta, 0, 0)$ is orthogonal to $(0, 0, -r)$:
+    \[
+        \iint_{\Sigma_0} (F \cdot \nu) \dS = \int_{0}^{2\pi} \int_{0}^{1} (r^2 \cos^2\theta, \, 0, \, 0) \cdot (0, \, 0, \, -r) \dr \dtheta = \boxed{0}.
+    \]
+    \item \textbf{Top disk $\Sigma_1$ ($z = 1$):} Parametrized over $A^1 = (0, 2\pi) \times (0, 1)$ by $\sigma^1(\theta, r) = (r \cos\theta, r \sin\theta, 1)$, giving $\sigma^1_\theta \times \sigma^1_r = (0, 0, -r)$ (pointing \textbf{inward}). Reversing the sign for the outward normal:
+    \[
+        \iint_{\Sigma_1} (F \cdot \nu) \dS = - \int_{0}^{2\pi} \int_{0}^{1} (r^2 \cos^2\theta, \, 0, \, 0) \cdot (0, \, 0, \, -r) \dr \dtheta = \boxed{0}.
+    \]
+\end{itemize}
+\end{exemple}
+
+\begin{exemple}[Solid Cylinder -- Part 2: Lateral Wall $\Sigma_2$ and Total Flux]
+\begin{itemize}
+    \item \textbf{Lateral wall $\Sigma_2$ ($x^2 + y^2 = 1$, $0 \le z \le 1$):} Parametrized over $A^2 = (0, 2\pi) \times (0, 1)$ by $\sigma^2(\theta, z) = (\cos\theta, \sin\theta, z)$, with outward normal $\sigma^2_\theta \times \sigma^2_z = (\cos\theta, \sin\theta, 0)$. Thus:
+    \begin{align*}
+        \iint_{\Sigma_2} (F \cdot \nu) \dS &= \int_{0}^{2\pi} \int_{0}^{1} (\cos^2\theta, \, 0, \, 0) \cdot (\cos\theta, \, \sin\theta, \, 0) \dz \dtheta \\
+        &= \left( \int_{0}^{1} \dz \right) \left( \int_{0}^{2\pi} \cos^3\theta \dtheta \right) = 1 \cdot \int_{0}^{2\pi} (1 - \sin^2\theta)\cos\theta \dtheta = \boxed{0}.
+    \end{align*}
+\end{itemize}
+Summing the three boundary contributions gives $\displaystyle\iint_{\partial\Omega} (F \cdot \nu) \dS = 0 + 0 + 0 = \boxed{0}$, verifying the theorem.
+\end{exemple}
+
+% ------------------------------------------------------------------------------
+\subsection{Applications of the Divergence Theorem}
+
+\subsubsection{Volume Computation via Boundary Integrals}
+
+\begin{corollaire}{Volume of a Regular Domain}{volume_divergence}
+For a regular domain $\Omega \subset \R^3$ with outer unit normal $\nu : \partial\Omega \to \R^3$, the volume of $\Omega$ is given by
+\[
+    \operatorname{Vol}(\Omega) = \frac{1}{3} \iint_{\partial\Omega} (F \cdot \nu) \dS = \iint_{\partial\Omega} (G_i \cdot \nu) \dS \qquad \text{for } i \in \{1, 2, 3\},
+\]
+where
+\[
+    F(x,y,z) = \begin{pmatrix} x \\ y \\ z \end{pmatrix}, \qquad
+    G_1(x,y,z) = \begin{pmatrix} x \\ 0 \\ 0 \end{pmatrix}, \qquad
+    G_2(x,y,z) = \begin{pmatrix} 0 \\ y \\ 0 \end{pmatrix}, \qquad
+    G_3(x,y,z) = \begin{pmatrix} 0 \\ 0 \\ z \end{pmatrix}.
+\]
+\end{corollaire}
+
+\begin{demonstration}
+Notice that $\operatorname{div} F = 1 + 1 + 1 = 3$ and $\operatorname{div} G_i = 1$ for each $i \in \{1, 2, 3\}$. By the Divergence Theorem (\ref{thm:divergence_theorem}), we immediately obtain
+\[
+    \operatorname{Vol}(\Omega) = \iiint_{\Omega} 1 \dx\dy\dz = \iiint_{\Omega} \operatorname{div} G_i(x,y,z) \dx\dy\dz = \iint_{\partial\Omega} (G_i \cdot \nu) \dS,
+\]
+and similarly $\displaystyle\operatorname{Vol}(\Omega) = \frac{1}{3} \iiint_{\Omega} \operatorname{div} F \dx\dy\dz = \frac{1}{3} \iint_{\partial\Omega} (F \cdot \nu) \dS$.
+\end{demonstration}
+
+\begin{remarque}[Parametric Formula for Volume]
+If $\partial\Omega$ is parametrized by $\sigma : \overline{A} \to \partial\Omega$, $(u,v) \mapsto \sigma(u,v) = \big(\sigma^1(u,v), \sigma^2(u,v), \sigma^3(u,v)\big)$ with outward-pointing normal $\sigma_u \times \sigma_v$, then since the first component of $\sigma_u \times \sigma_v$ is $(\sigma_u \times \sigma_v)^1 = \sigma^2_u \sigma^3_v - \sigma^3_u \sigma^2_v$, using $G_1(x,y,z) = (x,0,0)$ yields:
+\[
+    \operatorname{Vol}(\Omega) = \iint_{\partial\Omega} (G_1 \cdot \nu) \dS = \iint_{A} \sigma^1(u,v) \left( \sigma^2_u \sigma^3_v - \sigma^3_u \sigma^2_v \right) \,\dd u\,\dd v.
+\]
+\end{remarque}
+
+\subsubsection{Fluid Mechanics: The Continuity Equation (Conservation of Mass)}
+
+Let $v : \Omega \times \R_+ \to \R^3$, $(x,y,z,t) \mapsto v(x,y,z,t)$, denote the \textbf{flow velocity} of a fluid in a region, and let $\rho : \Omega \times \R_+ \to \R$, $(x,y,z,t) \mapsto \rho(x,y,z,t)$, denote the \textbf{density} of the fluid at time $t$.
+
+\begin{itemize}
+    \item \textbf{Total mass of fluid in $\Omega$ at time $t$:}
+    \[
+        M(t) = \iiint_{\Omega} \rho(x,y,z,t) \dx\dy\dz.
+    \]
+    \item \textbf{Net mass flux out of the fixed domain $\Omega$:} By definition of the mass current density $\rho v$ and the Divergence Theorem, the rate of mass leaving $\Omega$ across $\partial\Omega$ is
+    \[
+        \Phi = \iint_{\partial\Omega} (\rho v) \cdot \nu \dS = \iiint_{\Omega} \operatorname{div}(\rho v) \dx\dy\dz.
+    \]
+    \item \textbf{Conservation of mass:} Assuming there are no fluid sources or sinks inside $\Omega$, the net outward mass flux $\Phi$ must equal the rate of decrease of the mass inside $\Omega$:
+    \[
+        \Phi = -\frac{\dd M}{\dd t} = -\frac{\dd}{\dd t} \left( \iiint_{\Omega} \rho \dx\dy\dz \right) = \iiint_{\Omega} -\pdv{\rho}{t} \dx\dy\dz.
+    \]
+    Equating the two volume integrals gives
+    \[
+        \iiint_{\Omega} \left( \pdv{\rho}{t} + \operatorname{div}(\rho v) \right) \dx\dy\dz = 0.
+    \]
+    Since this identity holds for any arbitrary regular control volume $\Omega$ and the integrand is continuous, we obtain the differential form of the \textbf{continuity equation}:
+    \[
+        \boxed{-\pdv{\rho}{t} = \operatorname{div}(\rho v) \quad \Longleftrightarrow \quad \pdv{\rho}{t} + \dive(\rho v) = 0.}
+    \]
+\end{itemize}

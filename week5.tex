@@ -1,0 +1,408 @@
+% ==============================================================================
+% CHAPTER: WEEK 5 - GREEN'S THEOREM & SURFACES IN R^3
+% ==============================================================================
+
+\chapter{Week 5: Green's Theorem, Change of Variables, and Surfaces in \texorpdfstring{$\R^3$}{R3}}
+
+% ==============================================================================
+\section{Complements on Green's Theorem in \texorpdfstring{$\R^2$}{R2}}
+% ==============================================================================
+
+\subsection{2D Divergence (Normal) Form of Green's Theorem}
+
+Let $\Omega \subset \R^2$ be a regular bounded domain whose boundary $\partial\Omega$ is parametrized in the counterclockwise (positive) sense by $\gamma : [a,b] \to \partial\Omega$, $t \mapsto \gamma(t) = \big(\gamma_1(t), \gamma_2(t)\big)$. Given a vector field $F = (F_1, F_2) \in C^1(\overline{\Omega}, \R^2)$, we define the auxiliary rotated vector field
+\[
+    \Phi(x,y) = \begin{pmatrix} \Phi_1(x,y) \\ \Phi_2(x,y) \end{pmatrix} = \begin{pmatrix} -F_2(x,y) \\ F_1(x,y) \end{pmatrix}.
+\]
+Then the scalar curl of $\Phi$ equals the divergence of $F$:
+\[
+    \operatorname{curl} \Phi = \pdv{\Phi_2}{x} - \pdv{\Phi_1}{y} = \pdv{F_1}{x} - \pdv{(-F_2)}{y} = \pdv{F_1}{x} + \pdv{F_2}{y} = \operatorname{div} F.
+\]
+Along $\partial\Omega$, the unit tangent vector is $T\big(\gamma(t)\big) = \big(T_1(\gamma(t)), T_2(\gamma(t))\big) = \dfrac{\gamma'(t)}{\norm{\gamma'(t)}}$, and the \textbf{outward-pointing unit normal vector} $\nu\big(\gamma(t)\big)$ is obtained by rotating $T\big(\gamma(t)\big)$ clockwise by $\frac{\pi}{2}$:
+\[
+    \nu\big(\gamma(t)\big) = \begin{pmatrix} \nu_1(\gamma(t)) \\ \nu_2(\gamma(t)) \end{pmatrix} = \begin{pmatrix} T_2(\gamma(t)) \\ -T_1(\gamma(t)) \end{pmatrix} \iff \begin{cases} T_1(\gamma(t)) = -\nu_2(\gamma(t)), \\ T_2(\gamma(t)) = \nu_1(\gamma(t)). \end{cases}
+\]
+
+\begin{proposition}{Divergence Form of Green's Theorem in $\R^2$}{green_divergence_2d}
+Let $\Omega \subset \R^2$ be a regular domain with outward unit normal $\nu : \partial\Omega \to \R^2$, and let $F \in C^1(\overline{\Omega}, \R^2)$. Then
+\[
+    \iint_{\Omega} \operatorname{div} F(x,y) \dx\dy = \int_{\partial\Omega} (F \cdot \nu) \,\dd l.
+\]
+\end{proposition}
+
+\begin{demonstration}
+Applying Green's theorem to the auxiliary field $\Phi = (-F_2, F_1)$ yields:
+\begin{align*}
+    \iint_{\Omega} \operatorname{div} F \dx\dy &= \iint_{\Omega} \operatorname{curl} \Phi \dx\dy = \int_{\partial\Omega} \Phi \cdot \dd\vec{l} = \int_{a}^{b} \Phi\big(\gamma(t)\big) \cdot \gamma'(t) \dt \\
+    &= \int_{a}^{b} \Phi\big(\gamma(t)\big) \cdot \underbrace{\frac{\gamma'(t)}{\norm{\gamma'(t)}}}_{=\,T(\gamma(t))} \norm{\gamma'(t)} \dt \\
+    &= \int_{a}^{b} \Big[ \underbrace{\Phi_1\big(\gamma(t)\big)}_{=\,-F_2(\gamma(t))} \underbrace{T_1\big(\gamma(t)\big)}_{=\,-\nu_2(\gamma(t))} + \underbrace{\Phi_2\big(\gamma(t)\big)}_{=\,F_1(\gamma(t))} \underbrace{T_2\big(\gamma(t)\big)}_{=\,\nu_1(\gamma(t))} \Big] \norm{\gamma'(t)} \dt \\
+    &= \int_{a}^{b} \Big[ F_2\big(\gamma(t)\big) \nu_2\big(\gamma(t)\big) + F_1\big(\gamma(t)\big) \nu_1\big(\gamma(t)\big) \Big] \norm{\gamma'(t)} \dt \\
+    &= \int_{a}^{b} (F \cdot \nu)\big(\gamma(t)\big) \norm{\gamma'(t)} \dt = \int_{\partial\Omega} (F \cdot \nu) \,\dd l. \qedhere
+\end{align*}
+\end{demonstration}
+
+% ------------------------------------------------------------------------------
+\subsection{Proof of Green's Theorem for Rectangles}
+
+\begin{theoreme}{Green's Theorem on a Rectangle}{green_rectangle}
+Let $\Omega = (a,b) \times (c,d) \subset \R^2$ be an open rectangle and let $F : \overline{\Omega} \to \R^2$ be a vector field such that $F \in C^1(\overline{\Omega}, \R^2)$. Then, with $\partial\Omega$ oriented counterclockwise:
+\[
+    \iint_{\Omega} \operatorname{curl} F(x,y) \dx\dy = \int_{\partial\Omega} F \cdot \dd\vec{l}.
+\]
+\end{theoreme}
+
+\begin{demonstration}
+We compute both sides of the identity independently and verify that they coincide.
+
+\paragraph{1. Double Integral (Left-Hand Side):}
+By Fubini's theorem and the Fundamental Theorem of Calculus (FTC):
+\begin{align}
+    \iint_{\Omega} \operatorname{curl} F \dx\dy &= \iint_{\Omega} \left( \pdv{F_2}{x} - \pdv{F_1}{y} \right) \dx\dy \nonumber \\
+    &= \int_{c}^{d} \left( \int_{a}^{b} \pdv{F_2}{x}(x,y) \dx \right) \dy - \int_{a}^{b} \left( \int_{c}^{d} \pdv{F_1}{y}(x,y) \dy \right) \dx \nonumber \\
+    &\overset{\text{FTC}}{=} \int_{c}^{d} \big( F_2(b,y) - F_2(a,y) \big) \dy - \int_{a}^{b} \big( F_1(x,d) - F_1(x,c) \big) \dx. \tag{$*$}
+\end{align}
+
+\paragraph{2. Boundary Line Integral (Right-Hand Side):}
+We decompose the counterclockwise-oriented boundary $\partial\Omega = \Gamma_1 \cup \Gamma_2 \cup \Gamma_3 \cup \Gamma_4$ into four directed line segments:
+\begin{center}
+\begin{tikzpicture}[scale=1.1, >=Stealth]
+    % Axes
+    \draw[->, thick, color=paletteDark] (-0.5, 0) -- (4.5, 0) node[right] {$x$};
+    \draw[->, thick, color=paletteDark] (0, -0.5) -- (0, 3.2) node[above] {$y$};
+    
+    % Dashed projection lines
+    \draw[dashed, gray] (1, 0) node[below, black] {$a$} -- (1, 0.7);
+    \draw[dashed, gray] (3.5, 0) node[below, black] {$b$} -- (3.5, 0.7);
+    \draw[dashed, gray] (0, 0.7) node[left, black] {$c$} -- (1, 0.7);
+    \draw[dashed, gray] (0, 2.4) node[left, black] {$d$} -- (1, 2.4);
+    
+    % Rectangle shaded region
+    \fill[defCyan!8] (1, 0.7) rectangle (3.5, 2.4);
+    \node at (2.25, 1.55) {$\Omega$};
+    
+    % Rectangle boundary
+    \draw[thick, color=defCyan!90!black] (1, 0.7) rectangle (3.5, 2.4);
+    
+    % Midpoint orientation arrows and labels (pure arrows.meta, no decorations library needed)
+    \draw[->, thick, color=defCyan!90!black] (1, 0.7) -- (2.35, 0.7) node[below] {$\Gamma_1$};
+    \draw[->, thick, color=defCyan!90!black] (3.5, 0.7) -- (3.5, 1.65) node[right] {$\Gamma_2$};
+    \draw[->, thick, color=defCyan!90!black] (3.5, 2.4) -- (2.15, 2.4) node[above] {$\Gamma_3$};
+    \draw[->, thick, color=defCyan!90!black] (1, 2.4) -- (1, 1.45) node[left] {$\Gamma_4$};
+\end{tikzpicture}
+\end{center}
+\begin{itemize}
+    \item $\Gamma_1 = \left\{\gamma_1(t) = (t, c) \in \R^2 : t \in [a, b]\right\}$ (bottom edge, left to right):
+    \[
+        \int_{\Gamma_1} F \cdot \dd\vec{l} = \int_{a}^{b} F\big(\gamma_1(t)\big) \cdot \gamma_1'(t) \dt = \int_{a}^{b} \big(F_1(t,c), F_2(t,c)\big) \cdot (1, 0) \dt = \int_{a}^{b} F_1(t,c) \dt.
+    \]
+    \item $\Gamma_2 = \left\{\gamma_2(t) = (b, t) \in \R^2 : t \in [c, d]\right\}$ (right edge, bottom to top):
+    \[
+        \int_{\Gamma_2} F \cdot \dd\vec{l} = \int_{c}^{d} F\big(\gamma_2(t)\big) \cdot \gamma_2'(t) \dt = \int_{c}^{d} \big(F_1(b,t), F_2(b,t)\big) \cdot (0, 1) \dt = \int_{c}^{d} F_2(b,t) \dt.
+    \]
+    \item $\Gamma_3 = \left\{\gamma_3(t) = (t, d) \in \R^2 : t \text{ goes from } b \text{ to } a\right\}$ (top edge, right to left):
+    \[
+        \int_{\Gamma_3} F \cdot \dd\vec{l} = \int_{b}^{a} F\big(\gamma_3(t)\big) \cdot \gamma_3'(t) \dt = \int_{b}^{a} \big(F_1(t,d), F_2(t,d)\big) \cdot (1, 0) \dt = -\int_{a}^{b} F_1(t,d) \dt.
+    \]
+    \item $\Gamma_4 = \left\{\gamma_4(t) = (a, t) \in \R^2 : t \text{ goes from } d \text{ to } c\right\}$ (left edge, top to bottom):
+    \[
+        \int_{\Gamma_4} F \cdot \dd\vec{l} = \int_{d}^{c} F\big(\gamma_4(t)\big) \cdot \gamma_4'(t) \dt = \int_{d}^{c} \big(F_1(a,t), F_2(a,t)\big) \cdot (0, 1) \dt = -\int_{c}^{d} F_2(a,t) \dt.
+    \]
+\end{itemize}
+Summing the four line integrals gives:
+\begin{equation}
+    \int_{\partial\Omega} F \cdot \dd\vec{l} = \sum_{i=1}^{4} \int_{\Gamma_i} F \cdot \dd\vec{l} = \int_{a}^{b} \big( F_1(t,c) - F_1(t,d) \big) \dt + \int_{c}^{d} \big( F_2(b,t) - F_2(a,t) \big) \dt. \tag{$**$}
+\end{equation}
+Comparing $(*)$ and $(**)$, we see that $(*) = (**)$, which completes the proof.
+\end{demonstration}
+
+% ==============================================================================
+\section{Notations, Change of Variables, and Surfaces in \texorpdfstring{$\R^3$}{R3}}
+% ==============================================================================
+
+\subsection{Change of Variables in Multiple Integrals}
+
+\subsubsection{General Formula and Jacobian Determinant}
+
+Let $\Omega \subset \R^n$ be an open domain and let $f : \Omega \to \R$, $(x_1, \dots, x_n) \mapsto f(x_1, \dots, x_n)$, be a continuous scalar field, $f \in C^0(\Omega)$. A \textbf{change of variables} is described by a bijective map
+\[
+    u : \hat{\Omega} \to \Omega, \qquad (y_1, \dots, y_n) \mapsto u(y_1, \dots, y_n) = \big(u_1(y_1, \dots, y_n), \dots, u_n(y_1, \dots, y_n)\big) = (x_1, \dots, x_n),
+\]
+where $\hat{\Omega} \subset \R^n$ is an open domain. That is, we express the \emph{old variables} $(x_1, \dots, x_n)$ as functions of the \emph{new variables} $(y_1, \dots, y_n)$:
+\[
+    \begin{cases}
+        x_1 = u_1(y_1, \dots, y_n), \\
+        \hspace{1.8em}\vdots \\
+        x_n = u_n(y_1, \dots, y_n).
+    \end{cases}
+\]
+We require that $u \in C^1(\hat{\Omega}, \Omega)$ and that its \textbf{Jacobian determinant} is non-vanishing for all $y \in \hat{\Omega}$:
+\[
+    \det \nabla u(y) = \det \begin{pmatrix}
+        \pdv{u_1}{y_1} & \cdots & \pdv{u_1}{y_n} \\[1ex]
+        \vdots & \ddots & \vdots \\[1ex]
+        \pdv{u_n}{y_1} & \cdots & \pdv{u_n}{y_n}
+    \end{pmatrix} \neq 0 \qquad \forall y \in \hat{\Omega}.
+\]
+
+\begin{theoreme}{Change of Variables Formula}{change_of_variables}
+Under the above assumptions on $u : \hat{\Omega} \to \Omega$ and for any continuous integrable function $f \in C^0(\Omega)$, we have:
+\[
+    \idotsint_{\Omega} f(x_1, \dots, x_n) \dx_1 \cdots \dx_n = \idotsint_{\hat{\Omega}} f\big(u(y_1, \dots, y_n)\big) \, \abs{\det \nabla u(y_1, \dots, y_n)} \dy_1 \cdots \dy_n.
+\]
+\end{theoreme}
+
+\subsubsection{Standard Coordinate Systems in $\R^3$}
+
+\begin{exemple}[Cylindrical Coordinates in $\R^3$]
+\begin{itemize}
+    \item \textbf{Old variables} $(x_1, x_2, x_3)$: Cartesian coordinates in $\R^3$.
+    \item \textbf{New variables} $(y_1, y_2, y_3) = (r, \theta, z)$: Cylindrical coordinates in $\R^3$, with $r > 0$, $\theta \in [0, 2\pi)$, and $z \in \R$:
+    \[
+        \begin{cases}
+            x_1 = u_1(r, \theta, z) = r \cos\theta, \\
+            x_2 = u_2(r, \theta, z) = r \sin\theta, \\
+            x_3 = u_3(r, \theta, z) = z.
+        \end{cases}
+    \]
+\end{itemize}
+The Jacobian determinant of the transformation is:
+\[
+    \det \nabla u(r, \theta, z) = \det \begin{pmatrix}
+        \cos\theta & -r \sin\theta & 0 \\
+        \sin\theta & r \cos\theta & 0 \\
+        0 & 0 & 1
+    \end{pmatrix} = r \cos^2\theta + r \sin^2\theta = r > 0.
+\]
+Consequently, the triple integral transforms as:
+\[
+    \iiint_{\Omega} f(x_1, x_2, x_3) \dx_1\dx_2\dx_3 = \iiint_{\hat{\Omega}} f\big(u(r, \theta, z)\big) \, \abs{\det \nabla u(r, \theta, z)} \dr\dtheta\dz = \iiint_{\hat{\Omega}} f(r \cos\theta, r \sin\theta, z) \, r \dr\dtheta\dz.
+\]
+\textbf{Application (Volume of a cylinder):} Let $f = 1$ and $\Omega = \left\{(x_1, x_2, x_3) \in \R^3 : x_1^2 + x_2^2 < R^2 \text{ and } x_3 \in (0, h)\right\}$ be a right circular cylinder of radius $R > 0$ and height $h > 0$. Then:
+\[
+    \operatorname{Vol}(\Omega) = \iiint_{\Omega} 1 \dx_1\dx_2\dx_3 = \int_{0}^{h} \int_{0}^{2\pi} \int_{0}^{R} r \dr\dtheta\dz = 2\pi h \int_{0}^{R} r \dr = 2\pi h \left[ \frac{r^2}{2} \right]_{0}^{R} = \boxed{\pi R^2 h}.
+\]
+\end{exemple}
+
+\begin{exemple}[Spherical Coordinates in $\R^3$]
+\begin{itemize}
+    \item \textbf{Old variables} $(x_1, x_2, x_3)$: Cartesian coordinates in $\R^3$.
+    \item \textbf{New variables} $(y_1, y_2, y_3) = (r, \theta, \varphi)$: Spherical coordinates in $\R^3$, with $r > 0$, $\theta \in [0, 2\pi)$, and $\varphi \in [0, \pi]$ (where $\varphi$ is the polar/colatitude angle measured from the positive $x_3$-axis):
+    \[
+        \begin{cases}
+            x_1 = u_1(r, \theta, \varphi) = r \sin\varphi \cos\theta, \\
+            x_2 = u_2(r, \theta, \varphi) = r \sin\varphi \sin\theta, \\
+            x_3 = u_3(r, \theta, \varphi) = r \cos\varphi.
+        \end{cases}
+    \]
+\end{itemize}
+The Jacobian determinant with respect to the ordering $(r, \theta, \varphi)$ is:
+\[
+    \det \nabla u(r, \theta, \varphi) = \det \begin{pmatrix}
+        \sin\varphi \cos\theta & -r \sin\varphi \sin\theta & r \cos\varphi \cos\theta \\
+        \sin\varphi \sin\theta & r \sin\varphi \cos\theta & r \cos\varphi \sin\theta \\
+        \cos\varphi & 0 & -r \sin\varphi
+    \end{pmatrix} = -r^2 \sin\varphi.
+\]
+Taking the absolute value $\abs{\det \nabla u(r, \theta, \varphi)} = r^2 \sin\varphi$ (since $\sin\varphi \ge 0$ on $[0, \pi]$), we obtain:
+\[
+    \iiint_{\Omega} f(x_1, x_2, x_3) \dx_1\dx_2\dx_3 = \iiint_{\hat{\Omega}} f\big(u(r, \theta, \varphi)\big) \, r^2 \sin\varphi \dr\dtheta\dphi.
+\]
+\textbf{Application (Volume of a sphere):} Let $f = 1$ and $\Omega = \left\{(x_1, x_2, x_3) \in \R^3 : x_1^2 + x_2^2 + x_3^2 < R^2\right\}$ be the open ball of radius $R > 0$. Then:
+\[
+    \operatorname{Vol}(\Omega) = \iiint_{\Omega} 1 \dx_1\dx_2\dx_3 = \int_{0}^{\pi} \int_{0}^{2\pi} \int_{0}^{R} r^2 \sin\varphi \dr\dtheta\dphi = \left( \int_{0}^{R} r^2 \dr \right) \left( \int_{0}^{2\pi} \dtheta \right) \left( \int_{0}^{\pi} \sin\varphi \dphi \right) = \frac{R^3}{3} \cdot 2\pi \cdot 2 = \boxed{\frac{4}{3} \pi R^3}.
+\]
+\end{exemple}
+
+% ------------------------------------------------------------------------------
+\subsection{Surfaces in $\R^3$}
+
+\subsubsection{Definitions, Parametrizations, and Orientability}
+
+\begin{definition}{Vector Field and Partial Derivative Notations}{field_notations}
+\begin{enumerate}[label=\textbf{\alph*)}]
+    \item For a vector-valued function $G : \R^2 \to \R^3$, we denote its component functions using superscripts:
+    \[
+        G(u,v) = \big(G^1(u,v), \, G^2(u,v), \, G^3(u,v)\big).
+    \]
+    \item We use subscripts to denote partial derivatives of the entire vector field:
+    \[
+        G_u = \pdv{G}{u}, \qquad G_v = \pdv{G}{v}, \qquad G_{uv} = \frac{\partial^2 G}{\partial u \partial v},
+    \]
+    and similarly for each individual coordinate function ($i \in \{1, 2, 3\}$):
+    \[
+        G^i_u = \pdv{G^i}{u}, \qquad G^i_v = \pdv{G^i}{v}.
+    \]
+\end{enumerate}
+\end{definition}
+
+\begin{definition}{Regular Surface in $\R^3$}{regular_surface}
+A subset $\Sigma \subset \R^3$ is called a \textbf{regular surface} if:
+\begin{enumerate}[label=\textbf{\alph*)}]
+    \item There exists a bounded open domain $A \subset \R^2$ whose boundary $\partial A$ is a (piecewise) closed regular simple curve;
+    \item There exists a mapping
+    \[
+        \sigma : \overline{A} \to \R^3, \qquad (u,v) \mapsto \sigma(u,v) = \big(\sigma^1(u,v), \, \sigma^2(u,v), \, \sigma^3(u,v)\big),
+    \]
+    such that $\sigma \in C^1(\overline{A}, \R^3)$, $\sigma(\overline{A}) = \Sigma$, $\sigma$ is injective on the interior $A$, and the fundamental normal vector product is non-vanishing on $A$:
+    \[
+        \sigma_u(u,v) \times \sigma_v(u,v) = \det \begin{pmatrix}
+            e_1 & e_2 & e_3 \\
+            \sigma^1_u & \sigma^2_u & \sigma^3_u \\
+            \sigma^1_v & \sigma^2_v & \sigma^3_v
+        \end{pmatrix} \neq \vec{0} \qquad \forall (u,v) \in A.
+    \]
+\end{enumerate}
+\end{definition}
+
+\begin{remarque}[Parametrization, Normal Vector, and Analogy with Curves]
+\begin{enumerate}[label=\textbf{\arabic*)}]
+    \item The mapping $\sigma : \overline{A} \to \Sigma$ is called a \textbf{parametrization} of $\Sigma$.
+    \item Since $\sigma_u$ and $\sigma_v$ are linearly independent tangent vectors to $\Sigma$ at $\sigma(u,v)$, their cross product $\sigma_u \times \sigma_v$ is a \textbf{normal vector} to $\Sigma$. The corresponding \textbf{unit normal vector} at $\sigma(u,v)$ is
+    \[
+        \nu(u,v) = \frac{\sigma_u(u,v) \times \sigma_v(u,v)}{\norm{\sigma_u(u,v) \times \sigma_v(u,v)}}.
+    \]
+    \item \textbf{Comparison between a regular curve $\Gamma \subset \R^2$ (or $\R^3$) and a regular surface $\Sigma \subset \R^3$:}
+    \begin{center}
+    \renewcommand{\arraystretch}{1.35}
+    \begin{tabular}{@{}ll@{}}
+        \toprule
+        \textbf{Regular Curve $\Gamma \subset \R^2$ (or $\R^3$)} & \textbf{Regular Surface $\Sigma \subset \R^3$} \\
+        \midrule
+        Parametrization: $\gamma : [a,b] \to \Gamma$, $t \mapsto \gamma(t)$ & Parametrization: $\sigma : \overline{A} \to \Sigma$, $(u,v) \mapsto \sigma(u,v)$ \\
+        $\gamma([a,b]) = \Gamma$ and $\gamma$ injective on $(a,b)$ & $\sigma(\overline{A}) = \Sigma$ and $\sigma$ injective on $A$ \\
+        Regularity condition: $\norm{\gamma'(t)} \neq 0$ on $(a,b)$ & Regularity condition: $\norm{\sigma_u \times \sigma_v} \neq 0$ on $A$ \\
+        Line element: $\dd l = \norm{\gamma'(t)} \dt$ & Area element: $\dS = \norm{\sigma_u \times \sigma_v} \,\dd u\,\dd v$ \\
+        \bottomrule
+    \end{tabular}
+    \end{center}
+\end{enumerate}
+\end{remarque}
+
+\begin{definition}{Piecewise Regular Surface and Orientability}{piecewise_orientable}
+\begin{enumerate}[label=\textbf{\arabic*)}]
+    \item We say that $\Sigma \subset \R^3$ is a \textbf{piecewise regular surface} if there exist regular surfaces $\Sigma_1, \dots, \Sigma_k$ (overlapping only along their boundary curves) such that
+    \[
+        \Sigma = \bigcup_{i=1}^{k} \Sigma_i.
+    \]
+    \item A (piecewise) regular surface $\Sigma \subset \R^3$ is said to be \textbf{orientable} if there exists a parametrization such that the induced field of unit normals
+    \[
+        \nu : \Sigma \to \R^3
+    \]
+    is continuous across $\Sigma$. Such a continuous choice of unit normal field $\nu$ is called an \textbf{orientation} of $\Sigma$.
+\end{enumerate}
+\emph{Counterexamples (Non-orientable surfaces):} The \textbf{M\"obius strip} (a surface with a single boundary curve and only one side) and the \textbf{Klein bottle} (a closed surface with no inside or outside) are classic examples of non-orientable surfaces.
+\end{definition}
+
+\subsubsection{Examples of Parametrized Surfaces}
+
+\begin{exemple}[Example 1: Sphere of Radius $R$ Centered at the Origin]
+Consider the sphere of radius $R > 0$:
+\[
+    \Sigma = \left\{(x,y,z) \in \R^3 : x^2 + y^2 + z^2 = R^2\right\}.
+\]
+Let $A = (0, 2\pi) \times (0, \pi)$ and define $\sigma : \overline{A} \to \Sigma$ using spherical angles $(\theta, \varphi)$:
+\[
+    (\theta, \varphi) \mapsto \sigma(\theta, \varphi) = R \begin{pmatrix} \sin\varphi \cos\theta \\ \sin\varphi \sin\theta \\ \cos\varphi \end{pmatrix}.
+\]
+The partial derivatives $\sigma_\theta = \pdv{\sigma}{\theta}$ and $\sigma_\varphi = \pdv{\sigma}{\varphi}$ are given by
+\[
+    \sigma_\theta = R \begin{pmatrix} -\sin\varphi \sin\theta \\ \sin\varphi \cos\theta \\ 0 \end{pmatrix}, \qquad
+    \sigma_\varphi = R \begin{pmatrix} \cos\varphi \cos\theta \\ \cos\varphi \sin\theta \\ -\sin\varphi \end{pmatrix}.
+\]
+Computing their cross product yields:
+\[
+    \sigma_\theta \times \sigma_\varphi = R^2 \det \begin{pmatrix}
+        e_1 & e_2 & e_3 \\
+        -\sin\varphi \sin\theta & \sin\varphi \cos\theta & 0 \\
+        \cos\varphi \cos\theta & \cos\varphi \sin\theta & -\sin\varphi
+    \end{pmatrix} = \begin{pmatrix} -R^2 \sin^2\varphi \cos\theta \\ -R^2 \sin^2\varphi \sin\theta \\ -R^2 \sin\varphi \cos\varphi \end{pmatrix} = -\underbrace{R \sin\varphi}_{\ge\,0} \, \sigma(\theta, \varphi).
+\]
+\textbf{Remarks:}
+\begin{itemize}
+    \item Since $\sin\varphi > 0$ for all $\varphi \in (0, \pi)$, the vector $\sigma_\theta \times \sigma_\varphi = -R\sin\varphi\,\sigma(\theta, \varphi)$ points \textbf{inward} (toward the origin) and is non-zero everywhere on the open domain $A = (0, 2\pi) \times (0, \pi)$.
+    \item At $\varphi = 0$ and $\varphi = \pi$, we get $\norm{\sigma_\theta \times \sigma_\varphi} = 0$. These correspond to the North and South poles of the sphere, which lie on the boundary $\partial A$ (not in $A$), so Definition~\ref{def:regular_surface} is satisfied.
+\end{itemize}
+\end{exemple}
+
+\begin{exemple}[Example 2: Lateral Surface of a Unit Cylinder]
+Consider the cylindrical surface of radius $1$ and height $1$:
+\[
+    \Sigma = \left\{(x,y,z) \in \R^3 : x^2 + y^2 = 1 \text{ and } 0 \le z \le 1\right\}.
+\]
+Let $A = (0, 2\pi) \times (0, 1)$ and define $\sigma : \overline{A} \to \Sigma$ by
+\[
+    (\theta, z) \mapsto \sigma(\theta, z) = \begin{pmatrix} \cos\theta \\ \sin\theta \\ z \end{pmatrix}.
+\]
+Then the fundamental normal vector is:
+\[
+    \sigma_\theta \times \sigma_z = \det \begin{pmatrix}
+        e_1 & e_2 & e_3 \\
+        -\sin\theta & \cos\theta & 0 \\
+        0 & 0 & 1
+    \end{pmatrix} = \begin{pmatrix} \cos\theta \\ \sin\theta \\ 0 \end{pmatrix} \neq \vec{0} \qquad \forall (\theta, z) \in A,
+\]
+which has unit norm $\norm{\sigma_\theta \times \sigma_z} = 1$ and points horizontally \textbf{outward} away from the $z$-axis.
+\end{exemple}
+
+\begin{exemple}[Example 3: Cone of Half-Angle $\frac{\pi}{4}$ (Opening Angle $\frac{\pi}{2}$) and Height $h = 1$]
+Consider the upper conical surface
+\[
+    \Sigma = \left\{(x,y,z) \in \R^3 : z^2 = x^2 + y^2 \text{ and } 0 \le z \le 1\right\}.
+\]
+\begin{itemize}
+    \item Cross-section in the plane $y = 0$: $z^2 = x^2$ with $0 \le z \le 1 \implies z = \abs{x}$ (two rays at $\frac{\pi}{4}$ from the $z$-axis, forming a total opening angle of $\frac{\pi}{2}$).
+    \item Horizontal slice at height $z = 1$: the unit circle $x^2 + y^2 = 1$.
+\end{itemize}
+Let $A = (0, 2\pi) \times (0, 1)$ and parametrize $\Sigma$ in cylindrical coordinates by $\sigma : \overline{A} \to \Sigma$:
+\[
+    (\theta, z) \mapsto \sigma(\theta, z) = \begin{pmatrix} z \cos\theta \\ z \sin\theta \\ z \end{pmatrix}.
+\]
+The fundamental normal vector is:
+\[
+    \sigma_\theta \times \sigma_z = \det \begin{pmatrix}
+        e_1 & e_2 & e_3 \\
+        -z \sin\theta & z \cos\theta & 0 \\
+        \cos\theta & \sin\theta & 1
+    \end{pmatrix} = \begin{pmatrix} z \cos\theta \\ z \sin\theta \\ -z(\cos^2\theta + \sin^2\theta) \end{pmatrix} = \begin{pmatrix} z \cos\theta \\ z \sin\theta \\ -z \end{pmatrix}.
+\]
+For all $(\theta, z) \in A = (0, 2\pi) \times (0, 1)$, we have $\norm{\sigma_\theta \times \sigma_z} = \sqrt{z^2\cos^2\theta + z^2\sin^2\theta + z^2} = \sqrt{2}\,z > 0$ (vanishing only at the apex $z = 0 \in \partial A$), and its $z$-component $-z < 0$ points \textbf{downwards} (outer/descending normal to the cone).
+\end{exemple}
+
+% ==============================================================================
+\section{Surface Integrals}
+% ==============================================================================
+
+\subsection{Surface Integral of a Scalar Field}
+
+\begin{definition}{Surface Integral of a Scalar Field}{scalar_surface_integral_w5}
+Let $\Sigma \subset \R^3$ be a regular surface parametrized by
+\[
+    \sigma : \overline{A} \subset \R^2 \to \Sigma, \qquad (u,v) \mapsto \sigma(u,v),
+\]
+and let $f : \Sigma \to \R$, $x \mapsto f(x)$, be a continuous scalar field such that $f \in C^0(\Sigma)$. The \textbf{surface integral of $f$ over $\Sigma$} is defined by
+\[
+    \iint_{\Sigma} f \dS = \iint_{A} f\big(\sigma(u,v)\big) \norm{\sigma_u \times \sigma_v} \,\dd u\,\dd v.
+\]
+\end{definition}
+
+\begin{remarque}[Analogy with Line Integrals and Surface Area]
+\begin{enumerate}[label=\textbf{\alph*)}]
+    \item \textbf{Analogy with the line integral of a scalar field along a curve:}
+    \begin{center}
+    \renewcommand{\arraystretch}{1.4}
+    \begin{tabular}{@{}ll@{}}
+        \toprule
+        \textbf{Curve $\Gamma \subset \R^2$ or $\R^3$} & \textbf{Surface $\Sigma \subset \R^3$} \\
+        \midrule
+        $\gamma : [a,b] \to \Gamma$, $t \mapsto \gamma(t)$ & $\sigma : \overline{A} \to \Sigma$, $(u,v) \mapsto \sigma(u,v)$ \\
+        $g : \Gamma \to \R$ & $f : \Sigma \to \R$ \\
+        $\displaystyle \int_{\Gamma} g \,\dd l = \int_{a}^{b} g\big(\gamma(t)\big) \norm{\gamma'(t)} \dt$ & $\displaystyle \iint_{\Sigma} f \dS = \iint_{A} f\big(\sigma(u,v)\big) \norm{\sigma_u \times \sigma_v} \,\dd u\,\dd v$ \\
+        \bottomrule
+    \end{tabular}
+    \end{center}
+    \item \textbf{Area of $\Sigma$:} Setting $f = 1$ gives the area of the surface $\Sigma$ (analogous to $\operatorname{Length}(\Gamma) = \int_{\Gamma} 1 \,\dd l = \int_{a}^{b} \norm{\gamma'(t)} \dt$):
+    \[
+        \operatorname{Area}(\Sigma) = \iint_{\Sigma} 1 \dS = \iint_{A} \norm{\sigma_u \times \sigma_v} \,\dd u\,\dd v.
+    \]
+\end{enumerate}
+\end{remarque}

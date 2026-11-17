@@ -2,8 +2,7 @@
 % WEEK 1: DIFFERENTIAL OPERATORS
 % ==============================================================================
 
-\chapter{Differential Operators}
-\label{chap:week1}
+\chapter{Week 1 - Differential operators}
 
 \section{Review, Notations, and Terminology}
 
@@ -266,3 +265,153 @@ Summing the second derivatives along all three Cartesian directions:
 \end{align}
 Therefore, outside the origin, the gravitational potential satisfies Laplace's equation $\Delta f = 0$ and is a \textbf{harmonic function}.
 \end{exemple}
+
+\section{Special Operator Combinations and Proofs}
+
+\subsection{Divergence of a Scaled Gradient}
+\begin{proposition}{Divergence of $f \grad g$}{div_f_grad_g}
+Let $f \in \mathcal{C}^1(U, \R)$ and $g \in \mathcal{C}^2(U, \R)$. Then:
+\begin{equation}
+    \dive (f \grad g) = f \laplacian g + \inner{\grad f}{\grad g}.
+\end{equation}
+\end{proposition}
+
+\begin{demonstration}
+In index notation, with the summation convention implied over $i \in \{1, 2, 3\}$:
+\begin{align*}
+    \dive (f \grad g) &= \partial_i \left( f \, \partial_i g \right) \\
+    &= (\partial_i f)(\partial_i g) + f (\partial_i \partial_i g) \\
+    &= \inner{\grad f}{\grad g} + f \laplacian g. \qedhere
+\end{align*}
+\end{demonstration}
+
+\subsection{Gradient of a Scalar Product}
+\begin{proposition}{Gradient of $fg$}{grad_fg}
+Let $f, g \in \mathcal{C}^1(U, \R)$. Then:
+\begin{equation}
+    \grad (fg) = f \grad g + g \grad f.
+\end{equation}
+\end{proposition}
+
+\begin{demonstration}
+Evaluating component-wise for each $i \in \{1, 2, 3\}$:
+\begin{equation*}
+    [\grad(fg)]_i = \partial_i (fg) = (\partial_i f) g + f (\partial_i g) = [g \grad f + f \grad g]_i.
+\end{equation*}
+Thus:
+\begin{equation*}
+    \grad(fg) = f \grad g + g \grad f. \qedhere
+\end{equation*}
+\end{demonstration}
+
+\subsection{Divergence of a Scaled Vector Field}
+\begin{proposition}{Divergence of $f \bm{F}$}{div_f_F}
+Let $f \in \mathcal{C}^1(U, \R)$ and $\bm{F} \in \mathcal{C}^1(U, \R^3)$. Then:
+\begin{equation}
+    \dive (f \bm{F}) = f \dive \bm{F} + \inner{\grad f}{\bm{F}}.
+\end{equation}
+\end{proposition}
+
+\begin{demonstration}
+Using summation over repeated indices $i \in \{1, 2, 3\}$:
+\begin{align*}
+    \dive (f \bm{F}) &= \partial_i (f F_i) \\
+    &= (\partial_i f) F_i + f (\partial_i F_i) \\
+    &= \inner{\grad f}{\bm{F}} + f \dive \bm{F}. \qedhere
+\end{align*}
+\end{demonstration}
+
+\subsection{Curl of a Curl}
+\begin{proposition}{Curl of Curl Identity}{rot_rot_F}
+Let $\bm{F} \in \mathcal{C}^2(U, \R^3)$. Then:
+\begin{equation}
+    \rot (\rot \bm{F}) = -\laplacian \bm{F} + \grad(\dive \bm{F}).
+\end{equation}
+\end{proposition}
+
+\begin{demonstration}
+Using the Levi-Civita permutation symbol $\varepsilon_{ijk}$, where $[\rot \bm{F}]_j = \varepsilon_{jlm} \partial_l F_m$:
+\begin{align*}
+    [\rot(\rot \bm{F})]_i &= \varepsilon_{ijk} \partial_j (\varepsilon_{klm} \partial_l F_m) \\
+    &= \varepsilon_{kij} \varepsilon_{klm} \partial_j \partial_l F_m.
+\end{align*}
+Applying the contraction identity $\varepsilon_{kij} \varepsilon_{klm} = \delta_{il}\delta_{jm} - \delta_{im}\delta_{jl}$:
+\begin{align*}
+    [\rot(\rot \bm{F})]_i &= (\delta_{il}\delta_{jm} - \delta_{im}\delta_{jl}) \partial_j \partial_l F_m \\
+    &= \partial_j \partial_i F_j - \partial_j \partial_j F_i.
+\end{align*}
+By Schwarz's theorem for $\mathcal{C}^2$ fields, $\partial_j \partial_i F_j = \partial_i (\partial_j F_j) = [\grad(\dive \bm{F})]_i$, and $\partial_j \partial_j F_i = [\laplacian \bm{F}]_i$:
+\begin{equation*}
+    \rot(\rot \bm{F}) = \grad(\dive \bm{F}) - \laplacian \bm{F} = -\laplacian \bm{F} + \grad(\dive \bm{F}). \qedhere
+\end{equation*}
+\end{demonstration}
+
+\subsection{Curl of a Scaled Vector Field}
+\begin{proposition}{Curl of $f \bm{F}$}{rot_f_F}
+Let $f \in \mathcal{C}^1(U, \R)$ and $\bm{F} \in \mathcal{C}^1(U, \R^3)$. Then:
+\begin{equation}
+    \rot (f \bm{F}) = \grad f \times \bm{F} + f \rot \bm{F}.
+\end{equation}
+\end{proposition}
+
+\begin{demonstration}
+Using the explicit cross-product formulation:
+\begin{equation*}
+    \rot (f \bm{F}) = \begin{pmatrix} 
+        \partial_y(f F_z) - \partial_z(f F_y) \\ 
+        \partial_z(f F_x) - \partial_x(f F_z) \\ 
+        \partial_x(f F_y) - \partial_y(f F_x) 
+    \end{pmatrix}.
+\end{equation*}
+Applying the product rule to the $x$-component:
+\begin{align*}
+    \partial_y(f F_z) - \partial_z(f F_y) &= (\partial_y f) F_z + f (\partial_y F_z) - (\partial_z f) F_y - f (\partial_z F_y) \\
+    &= \bigl[(\grad f) \times \bm{F}\bigr]_x + f \bigl[\rot \bm{F}\bigr]_x.
+\end{align*}
+Repeating identically for the $y$- and $z$-components yields:
+\begin{equation*}
+    \rot(f \bm{F}) = \grad f \times \bm{F} + f \rot \bm{F}. \qedhere
+\end{equation*}
+\end{demonstration}
+
+\section{The Laplacian in Polar Coordinates}
+
+\subsection{Derivation via the Multivariate Chain Rule}
+\begin{theoreme}{Polar Coordinate Representation of $\laplacian f$}{laplacian_polar}
+Let $x = r \cos\theta$ and $y = r \sin\theta$ define the standard transformation from polar coordinates $(r, \theta) \in (0, \infty) \times [0, 2\pi)$ to Cartesian coordinates $(x, y) \in \R^2 \setminus \{(0,0)\}$. For a scalar field $f \in \mathcal{C}^2(\R^2, \R)$, let $g(r, \theta) = f(r \cos\theta, r \sin\theta)$. Then the Laplace operator satisfies:
+\begin{equation}
+    \laplacian f = \pdv[2]{g}{r} + \frac{1}{r}\pdv{g}{r} + \frac{1}{r^2}\pdv[2]{g}{\theta}.
+\end{equation}
+\end{theoreme}
+
+\begin{demonstration}
+Applying the first-order multivariate chain rule to $g(r, \theta) = f(x(r,\theta), y(r,\theta))$:
+\begin{align}
+    \pdv{g}{r} &= \cos\theta \pdv{f}{x} + \sin\theta \pdv{f}{y}, \\
+    \pdv{g}{\theta} &= -r\sin\theta \pdv{f}{x} + r\cos\theta \pdv{f}{y}.
+\end{align}
+Computing the second partial derivative with respect to $r$:
+\begin{align}
+    \pdv[2]{g}{r} &= \cos\theta \pdv{}{r}\left(\pdv{f}{x}\right) + \sin\theta \pdv{}{r}\left(\pdv{f}{y}\right) \notag \\
+    &= \cos\theta \left( \cos\theta \pdv[2]{f}{x} + \sin\theta \pdv[2]{f}{y}{x} \right) + \sin\theta \left( \cos\theta \pdv[2]{f}{x}{y} + \sin\theta \pdv[2]{f}{y} \right) \notag \\
+    &= \cos^2\theta \pdv[2]{f}{x} + 2\sin\theta\cos\theta \pdv[2]{f}{x}{y} + \sin^2\theta \pdv[2]{f}{y}.
+\end{align}
+Computing the second partial derivative with respect to $\theta$:
+\begin{align}
+    \pdv[2]{g}{\theta} &= \pdv{}{\theta}\left(-r\sin\theta \pdv{f}{x} + r\cos\theta \pdv{f}{y}\right) \notag \\
+    &= -r\cos\theta \pdv{f}{x} - r\sin\theta \pdv{}{\theta}\left(\pdv{f}{x}\right) - r\sin\theta \pdv{f}{y} + r\cos\theta \pdv{}{\theta}\left(\pdv{f}{y}\right) \notag \\
+    &= -r \left(\cos\theta \pdv{f}{x} + \sin\theta \pdv{f}{y}\right) \notag \\
+    &\quad + r \left[ -\sin\theta \left(-r\sin\theta \pdv[2]{f}{x} + r\cos\theta \pdv[2]{f}{y}{x}\right) + \cos\theta \left(-r\sin\theta \pdv[2]{f}{x}{y} + r\cos\theta \pdv[2]{f}{y}\right) \right] \notag \\
+    &= -r \pdv{g}{r} + r^2 \left( \sin^2\theta \pdv[2]{f}{x} - 2\sin\theta\cos\theta \pdv[2]{f}{x}{y} + \cos^2\theta \pdv[2]{f}{y} \right).
+\end{align}
+Dividing equation (2.16) by $r^2$:
+\begin{equation}
+    \frac{1}{r^2}\pdv[2]{g}{\theta} = -\frac{1}{r}\pdv{g}{r} + \sin^2\theta \pdv[2]{f}{x} - 2\sin\theta\cos\theta \pdv[2]{f}{x}{y} + \cos^2\theta \pdv[2]{f}{y}.
+\end{equation}
+Summing equations (2.15) and (2.17):
+\begin{align*}
+    \pdv[2]{g}{r} + \frac{1}{r}\pdv{g}{r} + \frac{1}{r^2}\pdv[2]{g}{\theta} &= (\cos^2\theta + \sin^2\theta)\pdv[2]{f}{x} + (\sin^2\theta + \cos^2\theta)\pdv[2]{f}{y} \\
+    &= \pdv[2]{f}{x} + \pdv[2]{f}{y} \\
+    &= \laplacian f. \qedhere
+\end{align*}
+\end{demonstration}

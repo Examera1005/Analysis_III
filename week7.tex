@@ -1,0 +1,254 @@
+\chapter{Week 7 - Stokes' Theorem}
+
+\section{Stokes' Theorem}
+
+\subsection{Motivation}
+Recall from Chapter 2 the statement of \textbf{Green's Theorem} in the plane:
+\begin{equation}
+    \iint_{B} \operatorname{curl} \mathbf{G}(x,y) \dx\dy = \int_{\partial B} \mathbf{G} \cdot \dd\bm{\ell},
+\end{equation}
+where $B \subset \R^2$ is a regular domain whose boundary $\partial B$ is positively oriented (traversed with the interior of $B$ on the left), and $\mathbf{G} \colon \overline{B} \to \R^2$ is a $C^1$ vector field, i.e., $\mathbf{G} \in C^1(\overline{B}, \R^2)$.
+
+Stokes' theorem provides the natural three-dimensional generalization of this identity to two-dimensional curved surfaces embedded in $\R^3$.
+
+\subsection{Boundary of a Surface}
+
+\begin{definition}{Boundary of a Parametric Surface}{boundary_surface}
+Let $\Sigma \subset \R^3$ be a regular surface parametrized by $\sigma \colon \overline{A} \to \Sigma$, where $A \subset \R^2$ is an open regular domain.
+\begin{enumerate}[label=\arabic*)]
+    \item The geometric boundary of $\Sigma$ is defined as
+    \begin{equation}
+        \partial \Sigma = \sigma(\partial A),
+    \end{equation}
+    which is independent of the chosen parametrization $\sigma$.
+    
+    \item The \textbf{direction of traversal} (circulation) along $\partial \Sigma$ is induced by $\sigma$, obtained by traversing $\partial A$ in the positive mathematical sense (with the interior of $A$ lying to the left).
+    
+    \item If $\Sigma \subset \R^3$ is a piecewise regular surface, the boundary decomposes into a union of regular curves:
+    \begin{equation}
+        \sigma(\partial A) = \Gamma_1 \cup \Gamma_2 \cup \dots \cup \Gamma_m.
+    \end{equation}
+    To determine the actual physical boundary $\partial \Sigma$, we process the curves according to the following reduction rules:
+    \begin{itemize}
+        \item Remove from $\sigma(\partial A)$ any curve $\Gamma_i$ that collapses to a single point.
+        \item Remove pairs of curves $\Gamma_j, \Gamma_k$ that map to the identical geometric locus but are traversed in opposite directions.
+        \item What remains constitutes the oriented boundary $\partial \Sigma$.
+    \end{itemize}
+\end{enumerate}
+\end{definition}
+
+\begin{exemple}[Cylinder]
+Consider the cylindrical surface
+\begin{equation*}
+    \Sigma = \left\{ (x,y,z) \in \R^3 : x^2 + y^2 = 1, \; 0 \le z \le 1 \right\},
+\end{equation*}
+parametrized over $A = (0, 2\pi) \times (0, 1)$ by:
+\begin{equation*}
+    \sigma \colon \overline{A} \to \R^3, \quad (\theta, z) \mapsto \sigma(\theta, z) = (\cos\theta, \, \sin\theta, \, z).
+\end{equation*}
+The boundary of the parameter domain is $\partial A = L_1 \cup L_2 \cup L_3 \cup L_4$, oriented counterclockwise:
+\begin{align*}
+    L_1 &= \left\{ \alpha_1(\theta) = (\theta, 0) : \theta \text{ from } 0 \to 2\pi \right\}, \\
+    L_2 &= \left\{ \alpha_2(z) = (2\pi, z) : z \text{ from } 0 \to 1 \right\}, \\
+    L_3 &= \left\{ \alpha_3(\theta) = (\theta, 1) : \theta \text{ from } 2\pi \to 0 \right\}, \\
+    L_4 &= \left\{ \alpha_4(z) = (0, z) : z \text{ from } 1 \to 0 \right\}.
+\end{align*}
+Mapping each segment through $\sigma$ yields $\Gamma_i = \sigma(L_i)$:
+\begin{align*}
+    \Gamma_1 &= \left\{ \gamma_1(\theta) = \sigma(\theta, 0) = (\cos\theta, \sin\theta, 0) \quad (\theta \colon 0 \to 2\pi) \right\}, \\
+    \Gamma_2 &= \left\{ \gamma_2(z) = \sigma(2\pi, z) = (1, 0, z) \quad (z \colon 0 \to 1) \right\}, \\
+    \Gamma_3 &= \left\{ \gamma_3(\theta) = \sigma(\theta, 1) = (\cos\theta, \sin\theta, 1) \quad (\theta \colon 2\pi \to 0) \right\}, \\
+    \Gamma_4 &= \left\{ \gamma_4(z) = \sigma(0, z) = (1, 0, z) \quad (z \colon 1 \to 0) \right\}.
+\end{align*}
+\textbf{Reduction:}
+\begin{itemize}
+    \item None of the segments collapse to a point.
+    \item $\Gamma_2$ and $\Gamma_4$ trace the exact same line segment on the cylinder with opposite orientations; hence, they cancel each other out: $\Gamma_2 + \Gamma_4 = 0$.
+\end{itemize}
+Therefore, the oriented boundary consists of the bottom and top rims:
+\begin{equation*}
+    \partial \Sigma = \Gamma_1 \cup \Gamma_3.
+\end{equation*}
+\end{exemple}
+
+\begin{exemple}[Lower Hemisphere]
+Consider the lower hemisphere
+\begin{equation*}
+    \Sigma = \left\{ (x,y,z) \in \R^3 : x^2 + y^2 + z^2 = 1, \; z < 0 \right\},
+\end{equation*}
+parametrized over $A = (0, 2\pi) \times \left(\frac{\pi}{2}, \pi\right)$ via spherical coordinates:
+\begin{equation*}
+    \sigma(\theta, \varphi) = (\sin\varphi \cos\theta, \, \sin\varphi \sin\theta, \, \cos\varphi).
+\end{equation*}
+The boundary segments of $A$ are:
+\begin{align*}
+    L_1 &\colon \varphi = \tfrac{\pi}{2}, \quad \theta \colon 0 \to 2\pi, \\
+    L_2 &\colon \theta = 2\pi, \quad \varphi \colon \tfrac{\pi}{2} \to \pi, \\
+    L_3 &\colon \varphi = \pi, \quad \theta \colon 2\pi \to 0, \\
+    L_4 &\colon \theta = 0, \quad \varphi \colon \pi \to \tfrac{\pi}{2}.
+\end{align*}
+Their images $\Gamma_i = \sigma(L_i)$ evaluate to:
+\begin{align*}
+    \Gamma_1 &= \left\{ \gamma_1(\theta) = \sigma\left(\theta, \tfrac{\pi}{2}\right) = (\cos\theta, \sin\theta, 0) \quad (\theta \colon 0 \to 2\pi) \right\}, \\
+    \Gamma_2 &= \left\{ \gamma_2(\varphi) = \sigma(2\pi, \varphi) = (\sin\varphi, 0, \cos\varphi) \quad \left(\varphi \colon \tfrac{\pi}{2} \to \pi\right) \right\}, \\
+    \Gamma_3 &= \left\{ \gamma_3(\theta) = \sigma(\theta, \pi) = (0, 0, -1) \quad (\theta \colon 2\pi \to 0) \right\} \quad \Longrightarrow \quad \text{collapses to a single point (South Pole)!}, \\
+    \Gamma_4 &= \left\{ \gamma_4(\varphi) = \sigma(0, \varphi) = (\sin\varphi, 0, \cos\varphi) \quad \left(\varphi \colon \pi \to \tfrac{\pi}{2}\right) \right\}.
+\end{align*}
+\textbf{Reduction:}
+\begin{itemize}
+    \item $\Gamma_3$ collapses to the south pole $(0,0,-1)$, so it is removed.
+    \item $\Gamma_2$ and $\Gamma_4$ describe the same meridian with opposite traversal directions, so they cancel.
+\end{itemize}
+Hence, the remaining oriented boundary is the equator:
+\begin{equation*}
+    \partial \Sigma = \Gamma_1.
+\end{equation*}
+\end{exemple}
+
+\subsubsection*{Practical Rule for Boundary Orientation}
+\begin{remarque}[Right-Hand / Observer Rule]
+If an observer walks along the boundary $\partial \Sigma$ with their head pointing in the direction of the surface normal vector $\sigma_u \times \sigma_v$, the positive direction of traversal is the one where the surface $\Sigma$ always remains on their \textbf{left-hand side}.
+\end{remarque}
+
+\subsection{Stokes' Theorem}
+
+\begin{theoreme}{Stokes' Theorem}{stokes}
+Let $\Sigma \subset \R^3$ be a piecewise regular, orientable surface with boundary $\partial \Sigma$. Let $\mathbf{F} \colon \Sigma \to \R^3$ be a vector field of class $C^1(\Sigma, \R^3)$. Then:
+\begin{equation}
+    \iint_{\Sigma} (\rot \mathbf{F}) \cdot \dd\mathbf{S} = \int_{\partial \Sigma} \mathbf{F} \cdot \dd\bm{\ell}.
+\end{equation}
+\end{theoreme}
+
+\begin{remarque}[Compatibility of Orientations]
+\leavevmode
+\begin{enumerate}[label=\alph*)]
+    \item Stokes' theorem is the direct three-dimensional generalization of Green's theorem to curved embedded surfaces in $\R^3$.
+    \item Both integrals depend explicitly on the chosen orientations of $\Sigma$ and $\partial \Sigma$. To make them compatible:
+    \begin{enumerate}[label=\roman*)]
+        \item Choose a parametrization $\sigma \colon \overline{A} \to \Sigma$, $(u,v) \mapsto \sigma(u,v)$, and take the normal vector $\sigma_u \times \sigma_v$ for the surface integral:
+        \begin{equation}
+            \iint_{\Sigma} (\rot \mathbf{F}) \cdot \dd\mathbf{S} = \iint_{A} \left( \rot \mathbf{F}(\sigma(u,v)) \right) \cdot (\sigma_u \times \sigma_v) \dd u \dd v.
+        \end{equation}
+        \item Traverse the boundary curve $\partial \Sigma$ in the direction induced by traversing $\partial A$ in the positive mathematical sense (keeping domain $A$ to the left).
+    \end{enumerate}
+\end{enumerate}
+\end{remarque}
+
+\subsection{Verification Examples}
+
+\begin{exemple}[Stokes' Theorem on a Cone]
+Verify Stokes' theorem for the conical surface
+\begin{equation*}
+    \Sigma = \left\{ (x,y,z) \in \R^3 : z^2 = x^2 + y^2, \; 0 \le z \le 1 \right\}
+\end{equation*}
+and the vector field $\mathbf{F}(x,y,z) = (z, \, x, \, y)$.
+
+\paragraph{Parametrization:}
+Let $A = (0, 2\pi) \times (0, 1)$ and parametrize $\Sigma$ by:
+\begin{equation*}
+    \sigma(\theta, z) = (z \cos\theta, \, z \sin\theta, \, z).
+\end{equation*}
+The tangent vectors are:
+\begin{equation*}
+    \sigma_\theta = (-z\sin\theta, \, z\cos\theta, \, 0), \qquad \sigma_z = (\cos\theta, \, \sin\theta, \, 1).
+\end{equation*}
+The normal vector is:
+\begin{equation*}
+    \sigma_\theta \times \sigma_z = 
+    \begin{pmatrix}
+        z \cos\theta \\
+        z \sin\theta \\
+        -z(\sin^2\theta + \cos^2\theta)
+    \end{pmatrix}
+    = (z \cos\theta, \, z \sin\theta, \, -z).
+\end{equation*}
+
+\paragraph{1. Surface Integral $\iint_{\Sigma} (\rot \mathbf{F}) \cdot \dd\mathbf{S}$:}
+Compute the curl of $\mathbf{F}$:
+\begin{equation*}
+    \rot \mathbf{F} = \det \begin{pmatrix} \mathbf{i} & \mathbf{j} & \mathbf{k} \\ \partial_x & \partial_y & \partial_z \\ z & x & y \end{pmatrix} = (1 - 0, \, 1 - 0, \, 1 - 0) = (1, 1, 1).
+\end{equation*}
+Taking the dot product with the normal vector:
+\begin{align*}
+    \iint_{\Sigma} (\rot \mathbf{F}) \cdot \dd\mathbf{S} &= \iint_{A} (\rot \mathbf{F}(\sigma(\theta,z))) \cdot (\sigma_\theta \times \sigma_z) \dd z \dd\theta \\
+    &= \int_0^{2\pi} \int_0^1 (1, 1, 1) \cdot (z \cos\theta, \, z \sin\theta, \, -z) \dd z \dd\theta \\
+    &= \int_0^{2\pi} \int_0^1 z(\cos\theta + \sin\theta - 1) \dd z \dd\theta \\
+    &= \left( \int_0^1 z \dd z \right) \int_0^{2\pi} (\cos\theta + \sin\theta - 1) \dd\theta \\
+    &= \frac{1}{2} \left( \underbrace{\int_0^{2\pi} \cos\theta \dd\theta}_{= 0} + \underbrace{\int_0^{2\pi} \sin\theta \dd\theta}_{= 0} - \int_0^{2\pi} 1 \dd\theta \right) \\
+    &= \frac{1}{2} (-2\pi) = \mathbf{-\pi}.
+\end{align*}
+
+\paragraph{2. Line Integral $\int_{\partial\Sigma} \mathbf{F} \cdot \dd\bm{\ell}$:}
+The boundary curves of domain $A$ are mapped to $\Gamma_i = \sigma(L_i)$:
+\begin{itemize}
+    \item $\Gamma_1 = \left\{ \sigma(\theta, 0) = (0, 0, 0) : \theta \colon 0 \to 2\pi \right\} \implies$ collapses to the cone apex $(0,0,0)$.
+    \item $\Gamma_2 = \left\{ \sigma(2\pi, z) = (z, 0, z) : z \colon 0 \to 1 \right\}$.
+    \item $\Gamma_3 = \left\{ \sigma(\theta, 1) = (\cos\theta, \sin\theta, 1) : \theta \colon 2\pi \to 0 \right\}$.
+    \item $\Gamma_4 = \left\{ \sigma(0, z) = (z, 0, z) : z \colon 1 \to 0 \right\}$.
+\end{itemize}
+$\Gamma_2$ and $\Gamma_4$ cancel each other, leaving $\partial\Sigma = \Gamma_3$ traversed from $\theta = 2\pi$ to $0$:
+\begin{equation*}
+    \gamma_3(\theta) = (\cos\theta, \, \sin\theta, \, 1), \quad \gamma_3'(\theta) = (-\sin\theta, \, \cos\theta, \, 0), \quad \theta \in [2\pi, 0].
+\end{equation*}
+Along $\gamma_3(\theta)$, the vector field evaluates to $\mathbf{F}(\gamma_3(\theta)) = (1, \, \cos\theta, \, \sin\theta)$. Thus:
+\begin{align*}
+    \int_{\partial\Sigma} \mathbf{F} \cdot \dd\bm{\ell} &= \int_{2\pi}^0 \mathbf{F}(\gamma_3(\theta)) \cdot \gamma_3'(\theta) \dd\theta \\
+    &= \int_{2\pi}^0 (1, \cos\theta, \sin\theta) \cdot (-\sin\theta, \cos\theta, 0) \dd\theta \\
+    &= \int_{2\pi}^0 (-\sin\theta + \cos^2\theta) \dd\theta \\
+    &= -\int_0^{2\pi} (-\sin\theta + \cos^2\theta) \dd\theta \\
+    &= \underbrace{\int_0^{2\pi} \sin\theta \dd\theta}_{= 0} - \int_0^{2\pi} \cos^2\theta \dd\theta \\
+    &= -\int_0^{2\pi} \frac{1 + \cos(2\theta)}{2} \dd\theta = \mathbf{-\pi}.
+\end{align*}
+Both sides agree with $-\pi$, verifying Stokes' Theorem.
+\end{exemple}
+
+\begin{remarque}[Alternative Ordering of Parameters]
+Had we chosen the order of variables as $(z, \theta)$, the normal vector would be $\sigma_z \times \sigma_\theta = -(\sigma_\theta \times \sigma_z)$, reversing the surface orientation. Simultaneously, the induced orientation of the boundary $\partial\Sigma$ would reverse, changing both integral values to $+\pi$.
+\end{remarque}
+
+\begin{exemple}[Stokes' Theorem on Upper Hemisphere]
+Verify Stokes' Theorem for the upper hemisphere
+\begin{equation*}
+    \Sigma = \left\{ (x,y,z) \in \R^3 : x^2 + y^2 + z^2 = 1, \; z \ge 0 \right\}
+\end{equation*}
+and the vector field $\mathbf{F}(x,y,z) = (z, \, x, \, y^2)$.
+
+\paragraph{Parametrization:}
+Let $A = (0, 2\pi) \times \left(0, \tfrac{\pi}{2}\right)$, parametrized by:
+\begin{equation*}
+    \sigma(\theta, \varphi) = (\sin\varphi \cos\theta, \, \sin\varphi \sin\theta, \, \cos\varphi).
+\end{equation*}
+The normal vector associated with this ordering of parameters is:
+\begin{equation*}
+    \sigma_\theta \times \sigma_\varphi = -\sin\varphi \, \sigma(\theta, \varphi) = -\sin\varphi (\sin\varphi\cos\theta, \, \sin\varphi\sin\theta, \, \cos\varphi)
+\end{equation*}
+(which points inwards, downward towards the origin).
+
+\paragraph{1. Curl Computation and Surface Integral:}
+\begin{equation*}
+    \rot \mathbf{F} = \det \begin{pmatrix} \mathbf{i} & \mathbf{j} & \mathbf{k} \\ \partial_x & \partial_y & \partial_z \\ z & x & y^2 \end{pmatrix} = (2y - 0, \, 1 - 0, \, 1 - 0) = (2y, \, 1, \, 1).
+\end{equation*}
+On the surface $\Sigma$, $y = \sin\varphi\sin\theta$, so:
+\begin{equation*}
+    \rot \mathbf{F}(\sigma(\theta,\varphi)) = (2\sin\varphi\sin\theta, \, 1, \, 1).
+\end{equation*}
+The surface integral is:
+\begin{equation*}
+    \iint_{\Sigma} (\rot \mathbf{F}) \cdot \dd\mathbf{S} = \int_0^{\pi/2} \int_0^{2\pi} (2\sin\varphi\sin\theta, \, 1, \, 1) \cdot \left(-\sin\varphi \, \sigma(\theta,\varphi)\right) \dd\theta \dd\varphi = \mathbf{-\pi}.
+\end{equation*}
+
+\paragraph{2. Line Integral:}
+The boundary components map to:
+\begin{itemize}
+    \item $\Gamma_1 = \sigma(\theta, 0) = (0, 0, 1)$ collapses to the North Pole.
+    \item $\Gamma_2$ and $\Gamma_4$ cancel along the shared meridian.
+    \item What remains is $\Gamma_3 = \sigma\left(\theta, \tfrac{\pi}{2}\right) = (\cos\theta, \, \sin\theta, \, 0)$ with $\theta \colon 2\pi \to 0$.
+\end{itemize}
+Evaluating the circulation:
+\begin{align*}
+    \int_{\partial\Sigma} \mathbf{F} \cdot \dd\bm{\ell} &= \int_{2\pi}^0 \mathbf{F}(\gamma_3(\theta)) \cdot \gamma_3'(\theta) \dd\theta \\
+    &= \int_{2\pi}^0 (0, \, \cos\theta, \, \sin^2\theta) \cdot (-\sin\theta, \, \cos\theta, \, 0) \dd\theta \\
+    &= \int_{2\pi}^0 \cos^2\theta \dd\theta = -\int_0^{2\pi} \cos^2\theta \dd\theta = \mathbf{-\pi}.
+\end{align*}
+Both calculations yield $-\pi$, confirming Stokes' Theorem.
+\end{exemple}
